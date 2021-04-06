@@ -26,20 +26,23 @@
                         <div class="hide" id="failed">
                             <div class="alert alert-danger" id="errorMessage"></div>
                         </div>
-                        <div class="hide" id="transactionUploadForm">
+                        <fieldset class="hide" id="transactionUploadForm">
                             <form id="uploadForm">
                                 <div class="card py-3 mb-shadow-2">
                                     <div class="col-md-12">
                                         <input type="file" name="transactionFile" id="uploadFile">
-                                        <div class="mt-2">
+                                        <div class="mt-2 col-md-3 p-0">
                                             <button type="submit" class="btn btn-success btn-sm">Simpan</button>
                                             <a href="download-template" class="btn btn-info btn-sm">Download Template</a>
+                                            <div class="float-right mr-5 hide" id="loader">
+                                                <img src="/uploads/spinner.gif" width="35px" height="35px"/>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </form>
                             <hr>
-                        </div>
+                        </fieldset>
                         <div class="row col-md-12">
                             <div class="col-md-2">
                                 <select name="status_id" class="form-control form-control-sm" id="status_id">
@@ -335,6 +338,10 @@
                 data: formData,
                 contentType: false,
                 processData: false,
+                beforeSend: function () {
+                    $('#transactionUploadForm').attr('disabled', true)
+                    $('#loader').removeClass('hide')
+                },
                 success: function (res) {
                     if (res.code === 200 && res.data === '') {
                         $.notify(res.message, "success")
@@ -355,6 +362,9 @@
         })
 
         async function setNullInputFile() {
+            $('#transactionUploadForm').attr('disabled', false)
+            $('#loader').addClass('hide')
+
             $('#transactionUploadForm').addClass('hide')
             $('#uploadFile').val('')
             upload = false
