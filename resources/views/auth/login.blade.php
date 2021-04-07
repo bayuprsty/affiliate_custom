@@ -70,10 +70,7 @@
                 </div>
                 <div class="card o-hidden border-0 shadow-lg my-5 bg-dark text-white">
                     <div class="card-body text-center p-5">
-                        <div class="py-2">
-                            <h2>Sign Up</h2>
-                            <a href="{{ route('register') }}" class="btn btn-lg btn-outline-light mt-3 my-3">Register Now</a>
-                        </div>
+                        
                     </div>
                 </div>
             </div>
