@@ -193,7 +193,8 @@ class DatatableController extends Controller
                         ->addColumn('action', function($row) {
                             $btn = '<div class="form-inline row">
                                         <center>
-                                            <button id="detailAffiliate" class="btn btn-info btn-sm btn-circle" title="Detail" data-id="'.$row->user_id.'"><i class="fa fa-eye"></i></button>
+                                            <button id="detailAffiliate" class="btn btn-info btn-sm btn-circle mr-2" title="Detail" data-id="'.$row->user_id.'"><i class="fa fa-eye"></i></button>
+                                            <button id="resendEmailLink" class="btn btn-danger btn-sm btnlink_'.$row['user_id'].'" title="Resend Email Link Affiliate" data-id="'.$row['user_id'].'"><i class="fas fa-envelope mr-1"></i>Resend Link</button>
                                         </center>
                                     </div>';
 
@@ -516,6 +517,12 @@ class DatatableController extends Controller
                         })
                         ->addColumn('no_rekening', function($row) {
                             return $row->user->nomor_rekening;
+                        })
+                        ->addColumn('atasnama_rekening', function($row) {
+                            return $row->user->atasnama_bank;
+                        })
+                        ->addColumn('nama_bank', function($row) {
+                            return $row->user->nama_bank;
                         })
                         ->editColumn('total', function($row) {
                             return $this->currencyView($row->total);

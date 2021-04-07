@@ -64,6 +64,7 @@ Route::group(['middleware' => 'auth'], function() {
             Route::get('/detailVendor', 'Admin\AffiliateController@detailVendor')->name('affiliate.detailVendor');
             Route::get('/download-template', 'Admin\AffiliateController@downloadTemplate');
             Route::post('/upload-affiliate', 'Admin\AffiliateController@uploadAffiliate')->name('affiliate.upload');
+            Route::get('/resend-email', 'Admin\AffiliateController@resendEmailLinkAffiliate')->name('affiliate.resendEmail');
         });
         
         Route::group(['prefix' => 'vendor'], function() {

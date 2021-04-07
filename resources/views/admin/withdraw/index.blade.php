@@ -22,6 +22,8 @@
                                         <th>Transaction ID</th>
                                         <th>Affiliate Username</th>
                                         <th>Nomor Rekening</th>
+                                        <th>Nama Rekening</th>
+                                        <th>Nama Bank</th>
                                         <th>Total Request</th>
                                         <th>Status</th>
                                         <th></th>
@@ -60,6 +62,8 @@
                 {data: 'id', name: 'id'},
                 {data: 'user_id', name: 'user_id'},
                 {data: 'no_rekening', name: 'no_rekening'},
+                {data: 'atasnama_rekening', name: 'atasnama_rekening'},
+                {data: 'nama_bank', name: 'nama_bank'},
                 {data: 'total', name: 'total'},
                 {data: 'status', name: 'status'},
                 {

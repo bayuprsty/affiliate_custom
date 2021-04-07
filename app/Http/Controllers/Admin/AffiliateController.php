@@ -94,7 +94,6 @@ class AffiliateController extends Controller
     public function downloadTemplate() {
         $date = Carbon::now()->format("Ymd");
         $fileName = "template_affiliate_$date.csv";
-        $file = public_path('download/template_affiliate.csv');
 
         $headers = array(
             "Content-type"        => "text/csv",
@@ -104,8 +103,15 @@ class AffiliateController extends Controller
             "Expires"             => "0"
         );
 
-        // return response()->stream($callback, 200, $headers);
-        return Response::download($file, $fileName, $headers);
+        $listColumn = ['Nama Depan', 'Nama Belakang', 'Email', 'Nomor Telepon', 'Nomor Rekening', 'Atasnama Rekening', 'Nama Bank'];
+
+        $callback = function() use ($listColumn) {
+            $file = fopen('php://output', 'w');
+            fputcsv($file, $listColumn);
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, $headers);
     }
 
     public function uploadAffiliate(Request $request) {
@@ -137,13 +143,10 @@ class AffiliateController extends Controller
 
                     $url = URL::to('/').'/share/';
                     $media = Media::where('name', 'Website')->first();
-                    $vendorActive = Vendor::where('active', true)->get();
 
-                    foreach ($vendorActive as $key => $vendor) {
-                        $arrVendorId[] = $vendor->id;
-                    }
-
-                    $serviceCommission = ServiceCommission::join('vendors', 'service_commissions.vendor_id', '=', 'vendors.id')->whereIn('vendor_id', $arrVendorId)->get();
+                    $serviceCommission = ServiceCommission::whereHas('vendor', function($query) {
+                        $query->where('active', true);
+                    })->get();
 
                     foreach ($dataCsv as $data) {
                         $userAvailable = User::where('email', $data['Email'])->first();
@@ -153,6 +156,7 @@ class AffiliateController extends Controller
                                 'nama_belakang'  => $data['Nama Belakang'],
                                 'no_telepon'     => $data['Nomor Telepon'],
                                 'nomor_rekening' => $data['Nomor Rekening'],
+                                'atasnama_bank'  => $data['Atasnama Rekening'],
                                 'nama_bank'      => $data['Nama Bank']
                             ]);
                         } else {
@@ -163,7 +167,9 @@ class AffiliateController extends Controller
                                     'email'          => $data['Email'],
                                     'no_telepon'     => $data['Nomor Telepon'],
                                     'nomor_rekening' => $data['Nomor Rekening'],
-                                    'nama_bank'      => $data['Nama Bank']
+                                    'atasnama_bank'  => $data['Atasnama Rekening'],
+                                    'nama_bank'      => $data['Nama Bank'],
+                                    'join_date'      => Carbon::NOW()
                                 ]);
                             } catch (\Exception $e) {
                                 $failedMessage = $e->getMessage();
@@ -174,11 +180,11 @@ class AffiliateController extends Controller
                             $createUpdateSuccess++;
                             if ($userCreated) {
                                 $dataService = [];
+                                $vendorHasService = [];
                                 foreach ($serviceCommission as $idxVendor => $service) {
-                                    $dataService[] = [
-                                        'vendor_id' => $service->vendor_id,
-                                        'vendor_name' => $service->name,
-                                        'commission' => $service->commission_type_id == 1 ? 'Rp. '.$service->commission_value : $service->commission_value.' %',
+                                    if (!in_array($service->vendor_id, $vendorHasService)) {$vendorHasService[] = $service->vendor_id;} else {continue;}
+                                    $dataService[$service->vendor_id][] = [
+                                        'commission' => $service->commission_type_id == 1 ? 'Rp. '.$service->commission_value : $service->commission_value.'%',
                                         'service_name' => $service->title,
                                         'link_affiliate' => $url.$service->id.'.'.$userCreated->id.'.'.$media->id,
                                     ];
@@ -186,7 +192,8 @@ class AffiliateController extends Controller
 
                                 $dataMail = [
                                     'nama_lengkap' => $data['Nama Depan'].' '.$data['Nama Belakang'],
-                                    'service' => $dataService
+                                    'serviceList' => $dataService,
+                                    'vendorList' => Vendor::where('active', true)->get()
                                 ];
 
                                 Mail::send(['html' => 'admin.affiliate.email_link_affiliate'], $dataMail, function($message) use ($data) {
@@ -217,6 +224,44 @@ class AffiliateController extends Controller
                 $messages = 'File upload must be csv type';
                 return $this->sendResponse($messages, '', 400);
             }
+        }
+    }
+
+    public function resendEmailLinkAffiliate(Request $request) {
+        if ($request->ajax()) {
+            $url = URL::to('/').'/share/';
+            $media = Media::where('name', 'Website')->first();
+
+            $user = User::where('id', $request->userID)->first(['id','nama_depan','nama_belakang','email']);
+
+            $serviceCommission = ServiceCommission::whereHas('vendor', function ($query) {
+                $query->where('active', true);
+            })->get();
+
+            $vendorHasService = [];
+
+            foreach ($serviceCommission as $idxVendor => $service) {
+                if (!in_array($service->vendor_id, $vendorHasService)) {$vendorHasService[] = $service->vendor_id;}
+                $dataService[$service->vendor_id][] = [
+                    'commission' => $service->commission_type_id == 1 ? 'Rp. '.$service->commission_value : $service->commission_value.'%',
+                    'service_name' => $service->title,
+                    'link_affiliate' => $url.$service->id.'.'.$user->id.'.'.$media->id,
+                ];
+            }
+
+            $dataMail = [
+                'nama_lengkap' => $user->nama_depan.' '.$user->nama_belakang,
+                'serviceList' => $dataService,
+                'vendorList' => Vendor::where('active', true)->whereIn('id', $vendorHasService)->get()
+            ];
+
+            
+            Mail::send(['html' => 'admin.affiliate.email_link_affiliate'], $dataMail, function($message) use ($user) {
+                $message->to($user->email)->subject('Email Link Affiliate');
+            });
+
+            $messages = 'Email Link Affiliate Resend Successfully';
+            return $this->sendResponse($messages, '', 200);
         }
     }
 }

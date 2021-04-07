@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\CommissionType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
@@ -221,12 +222,17 @@ class TransactionController extends Controller
                         if ($leadExists) {
                             try {
                                 $failedMessage = '';
+                                $commissionType = $leadExists->service->commission_type_id;
+                                $commissionValue = $leadExists->service->commission_value;
+                                $jumlahBayar = (int) $data['Jumlah Bayar'];
+                                $commission = $commissionType == CommissionType::FIXED ? $commissionValue : ($commissionValue/100) * $jumlahBayar;
+                                
                                 $dataTransaction = [
                                     'lead_id' => $leadExists->id,
                                     'service_commission_id' => $leadExists->service_id,
                                     'transaction_date' => $transactionDate,
-                                    'amount' => (int) $data['Jumlah Bayar'],
-                                    'commission' => $leadExists->service->commission_value,
+                                    'amount' => $jumlahBayar,
+                                    'commission' => $commission,
                                 ];
 
                                 $transactionCreated = Transaction::create($dataTransaction);

@@ -152,6 +152,28 @@
             })
         })
 
+        $('body').on('click', '#resendEmailLink', function() {
+            let userID = $(this).data('id')
+            
+            $.ajax({
+                url: "{{ route('affiliate.resendEmail') }}",
+                method: "GET",
+                datatype: "JSON",
+                data: {
+                    userID: userID
+                },
+                beforeSend: function() {
+                    $(`.btnlink_${userID}`).attr('disabled', true)
+                },
+                success: function (res) {
+                    if (res.code == 200) {
+                        $.notify(res.message, "success")
+                        $(`.btnlink_${userID}`).attr('disabled', false)
+                    }
+                }
+            })
+        })
+
         function setNullInputFile() {
             $('#affiliateUploadForm').attr('disabled', false)
             $('#loader').addClass('hide')

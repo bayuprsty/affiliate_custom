@@ -34,7 +34,7 @@
                                         <div class="mt-2 col-md-3 p-0">
                                             <button type="submit" class="btn btn-success btn-sm">Simpan</button>
                                             <a href="download-template" class="btn btn-info btn-sm">Download Template</a>
-                                            <div class="float-right mr-5 hide" id="loader">
+                                            <div class="float-right mr-5 hide" id="loader-upload">
                                                 <img src="/uploads/spinner.gif" width="35px" height="35px"/>
                                             </div>
                                         </div>
@@ -340,7 +340,7 @@
                 processData: false,
                 beforeSend: function () {
                     $('#transactionUploadForm').attr('disabled', true)
-                    $('#loader').removeClass('hide')
+                    $('#loader-upload').removeClass('hide')
                 },
                 success: function (res) {
                     if (res.code === 200 && res.data === '') {
@@ -363,7 +363,7 @@
 
         async function setNullInputFile() {
             $('#transactionUploadForm').attr('disabled', false)
-            $('#loader').addClass('hide')
+            $('#loader-upload').addClass('hide')
 
             $('#transactionUploadForm').addClass('hide')
             $('#uploadFile').val('')
