@@ -117,7 +117,7 @@
                                     </div>
                                 </div>
                                 @can('isAffiliator')
-                                <i class="text-xl text-danger font-weight-bold">* Jika ingin merubah data, Silahkan menghubungi Admin dengan mengirim emial ke : affiliate@davinti.co.id</i>
+                                <i class="text-xl text-danger font-weight-bold">* Jika ingin merubah data, Silahkan menghubungi Admin dengan mengirim email ke : affiliate@tradingnyantai.com</i>
                                 @endcan
                                 <div class="form-group row">
                                     <div class="col-sm-12 text-center">

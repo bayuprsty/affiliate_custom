@@ -11,7 +11,7 @@
             
             .header, .footer {
                 text-align: center;
-                background-color: #1cc88a
+                background-color: #4e73df
             }
             
             .header-container, .footer-container {
@@ -27,7 +27,7 @@
             .content {
                 padding: 2rem 1rem;
                 text-align: center;
-                border: 1px solid #1cc88a;
+                border: 1px solid #4e73df;
             }
 
             .table {
@@ -64,7 +64,7 @@
         <div class="container">
             <div class="header">
                 <div class="header-container">
-                    <h1>Davinti Affiliate System</h1>
+                    <h1>Akela Affiliate System</h1>
                 </div>
             </div>
             <div class="content">

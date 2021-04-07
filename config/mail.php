@@ -57,7 +57,7 @@ return [
 
     'from' => [
         'address' => env('MAIL_FROM_ADDRESS', 'affiliate@davinti.co.id'),
-        'name' => env('MAIL_FROM_NAME', 'Davinti Affiliate System'),
+        'name' => env('MAIL_FROM_NAME', 'Akela Affiliate System'),
     ],
 
     /*

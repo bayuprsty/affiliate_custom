@@ -11,7 +11,7 @@
             
             .header, .footer {
                 text-align: center;
-                background-color: #1cc88a
+                background-color: #4e73df
             }
             
             .header-container, .footer-container {
@@ -27,7 +27,7 @@
             .content {
                 padding: 2rem 1rem;
                 text-align: center;
-                border: 1px solid #1cc88a;
+                border: 1px solid #4e73df;
             }
 
             .btn {
@@ -265,7 +265,7 @@
         <div class="container">
             <div class="header">
                 <div class="header-container">
-                    <h1>Davinti Affiliate System</h1>
+                    <h1>Akela Affiliate System</h1>
                 </div>
             </div>
             <div class="content">
@@ -274,14 +274,16 @@
                 <h4>This is <b>Affiliate Link</b> You Can Share:</h4>
                 <br/>
                 <center>
-                @foreach ($service as $listService)
-                    <h2><b>{{$listService['vendor_name']}}</b></h2>
-                    <h4>{{$listService['service_name']}}</h4>
-                    <input type="text" id="linkAffiliate_{{$listService['vendor_id']}}" class="form-control" value="{{$listService['link_affiliate']}}" readonly>
-                    <i style="margin-top: 5px; font-size: 15px;">You will get {{$listService['commission']}} Per Sale</i>
-                    <br/>
-                    <br/>
-                @endforeach
+                    @foreach ($vendorList as $vendor)
+                            <h2><b>{{$vendor->name}}</b></h2>
+                        @foreach ($serviceList[$vendor->id] as $service)
+                            <h4>{{$service['service_name']}}</h4>
+                            <input type="text" class="form-control" value="{{$service['link_affiliate']}}" readonly>
+                            <i style="margin-top: 5px; font-size: 15px;">You will get {{$service['commission']}} Per Sale</i>
+                            <br/>
+                            <br/>
+                        @endforeach
+                    @endforeach
                 </center>
             </div>
             <div class="footer">

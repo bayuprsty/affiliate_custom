@@ -195,7 +195,7 @@
         <div class="container">
             <div class="header">
                 <div class="header-container">
-                    <h1>Davinti Affiliate System</h1>
+                    <h1>Akela Affiliate System</h1>
                 </div>
             </div>
             <div class="content">
