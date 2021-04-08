@@ -254,6 +254,6 @@ class AjaxController extends Controller
     }
 
     public function getWebhook(Request $request) {
-        Storage::put('file.txt', $request);
+        Storage::disk('local')->put('file.txt', $request);
     }
 }
