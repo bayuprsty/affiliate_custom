@@ -27,8 +27,8 @@ class Affiliate extends Model
         curl_close($client);
 
         $dataResult = [
-            'data' => json_decode($response, true),
-            'code' => json_decode($response_code, true)
+            'code' => json_decode($response_code, true),
+            json_decode($response, true),
         ];
 
         return $dataResult;
