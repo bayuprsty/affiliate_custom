@@ -19,11 +19,20 @@ private static $installed = array (
     'aliases' => 
     array (
     ),
-    'reference' => 'cc9a8f73921608477c0884dde77fba00f0f0f171',
+    'reference' => 'ee620236a23c84ce3adeb35c54cf7d9bcc30a7d6',
     'name' => 'laravel/laravel',
   ),
   'versions' => 
   array (
+    'asm89/stack-cors' => 
+    array (
+      'pretty_version' => 'v2.0.3',
+      'version' => '2.0.3.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '9cb795bf30988e8c96dd3c40623c48a877bc6714',
+    ),
     'barryvdh/laravel-dompdf' => 
     array (
       'pretty_version' => 'v0.8.7',
@@ -217,6 +226,15 @@ private static $installed = array (
       array (
       ),
       'reference' => 'feb0e820b8436873675fd3aca04f3728eb2185cb',
+    ),
+    'fruitcake/laravel-cors' => 
+    array (
+      'pretty_version' => 'v2.0.3',
+      'version' => '2.0.3.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '01de0fe5f71c70d1930ee9a80385f9cc28e0f63a',
     ),
     'fzaninotto/faker' => 
     array (
@@ -516,7 +534,7 @@ private static $installed = array (
       'aliases' => 
       array (
       ),
-      'reference' => 'cc9a8f73921608477c0884dde77fba00f0f0f171',
+      'reference' => 'ee620236a23c84ce3adeb35c54cf7d9bcc30a7d6',
     ),
     'laravel/passport' => 
     array (
