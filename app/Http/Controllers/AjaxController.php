@@ -254,6 +254,6 @@ class AjaxController extends Controller
     }
 
     public function getWebhook(Request $request) {
-        Log::info('tes123');
+        Log::info($request);
     }
 }
