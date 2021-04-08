@@ -252,7 +252,7 @@ class AjaxController extends Controller
         }
     }
 
-    public function akelaWebhook(Request $request) {
+    public function getWebhook(Request $request) {
         Log::info($request);
     }
 }
