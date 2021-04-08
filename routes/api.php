@@ -15,6 +15,6 @@ use Illuminate\Http\Request;
 Route::post('/getAccessToken', 'Api\ApiController@getAccessToken');
 
 Route::group(['middleware' => 'auth.api'], function() {
-    Route::post('/setLeadData', 'Api\ApiController@setDataLead');
-    Route::post('/setTransactionData', 'Api\ApiController@setDataTransaction');
+    Route::post('/setLeadData', 'Api\ApiController@setDataLead')->name('api.lead');
+    Route::post('/setTransactionData', 'Api\ApiController@setDataTransaction')->name('api.transaction');
 });
