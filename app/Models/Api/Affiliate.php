@@ -3,6 +3,7 @@
 namespace App\Models\Api;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Log;
 
 class Affiliate extends Model
 {
@@ -49,6 +50,8 @@ class Affiliate extends Model
         $url = 'https://share.tradingnyantai.com/api/getAccessToken';
 
         $result = Self::postCurl($url, $headers, $body);
+
+        Log::info($result);
 
         if ($result['data']['token']) {
             return $result['data']['token'];
