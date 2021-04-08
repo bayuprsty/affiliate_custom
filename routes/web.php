@@ -36,6 +36,7 @@ Route::post('/confirmation', 'AuthController@setConfirmation')->name('auth.confi
 
 Route::get('/share/{sharedValue}', 'AffiliateController@shareLink');
 Route::post('/setclick', 'AjaxController@setClick')->name('ajax.setClick');
+Route::post('/akela_webhook', 'AjaxController@akelaWebhook');
 
 Route::group(['middleware' => 'auth'], function() {
     Route::get('/all', 'NotificationController@allNotification')->name('all.notification');

@@ -14,6 +14,7 @@ use App\Models\WithdrawalStatus;
 use App\Models\Click;
 use App\Models\User;
 use App\Models\Lead;
+use Illuminate\Support\Facades\Log;
 
 class AjaxController extends Controller
 {
@@ -249,5 +250,9 @@ class AjaxController extends Controller
             }
             
         }
+    }
+
+    public function akelaWebhook(Request $request) {
+        Log::info($request);
     }
 }
