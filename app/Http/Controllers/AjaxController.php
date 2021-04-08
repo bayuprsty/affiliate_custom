@@ -15,6 +15,7 @@ use App\Models\Click;
 use App\Models\User;
 use App\Models\Lead;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class AjaxController extends Controller
 {
@@ -253,7 +254,6 @@ class AjaxController extends Controller
     }
 
     public function getWebhook(Request $request) {
-        Log::info($request);
-        logger($request);
+        Storage::put('file.txt', $request);
     }
 }
