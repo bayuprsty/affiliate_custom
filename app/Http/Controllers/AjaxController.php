@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-
+use App\Models\Api\Affiliate;
 use App\Models\ServiceCommission;
 use App\Models\Notification;
 use App\Models\WithdrawalStatus;
@@ -15,7 +15,6 @@ use App\Models\Click;
 use App\Models\User;
 use App\Models\Lead;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
 
 class AjaxController extends Controller
 {
@@ -254,6 +253,13 @@ class AjaxController extends Controller
     }
 
     public function getWebhook(Request $request) {
-        Log::info($request);
+        if (!is_null($request['customer_note'])) {
+            Affiliate::setLeadApi($request['billing'], $request['customer_note']);
+        } else {
+            $secretID = 'nofdB3nmknTYa7u8HQRzwjLfkw4RhT';
+            $token = Affiliate::getToken($secretID);
+
+            Log::info($token);
+        }
     }
 }
