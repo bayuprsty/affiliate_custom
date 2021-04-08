@@ -1,16 +1,34 @@
 <?php return array (
   'root' => 
   array (
-    'pretty_version' => 'No version set (parsed as 1.0.0)',
-    'version' => '1.0.0.0',
+    'pretty_version' => 'dev-master',
+    'version' => 'dev-master',
     'aliases' => 
     array (
     ),
-    'reference' => NULL,
+    'reference' => 'cb1aa9eb01b8abc7aa0e8467397d97a3866929bf',
     'name' => 'laravel/laravel',
   ),
   'versions' => 
   array (
+    'asm89/stack-cors' => 
+    array (
+      'pretty_version' => 'v2.0.3',
+      'version' => '2.0.3.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '9cb795bf30988e8c96dd3c40623c48a877bc6714',
+    ),
+    'barryvdh/laravel-cors' => 
+    array (
+      'pretty_version' => 'v2.0.3',
+      'version' => '2.0.3.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '01de0fe5f71c70d1930ee9a80385f9cc28e0f63a',
+    ),
     'barryvdh/laravel-dompdf' => 
     array (
       'pretty_version' => 'v0.8.7',
@@ -498,12 +516,12 @@
     ),
     'laravel/laravel' => 
     array (
-      'pretty_version' => 'No version set (parsed as 1.0.0)',
-      'version' => '1.0.0.0',
+      'pretty_version' => 'dev-master',
+      'version' => 'dev-master',
       'aliases' => 
       array (
       ),
-      'reference' => NULL,
+      'reference' => 'cb1aa9eb01b8abc7aa0e8467397d97a3866929bf',
     ),
     'laravel/passport' => 
     array (
