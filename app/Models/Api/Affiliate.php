@@ -22,16 +22,10 @@ class Affiliate extends Model
         }
 
         $response = curl_exec($client);
-        $response_code = curl_getinfo($client, CURLINFO_HTTP_CODE);
 
         curl_close($client);
 
-        $dataResult = [
-            'code' => json_decode($response_code, true),
-            json_decode($response, true),
-        ];
-
-        return $dataResult;
+        return json_decode($response, true);
     }
 
     public static function getToken($secretID) {
