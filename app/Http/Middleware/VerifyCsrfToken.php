@@ -19,6 +19,6 @@ class VerifyCsrfToken extends Middleware
      * @var array
      */
     protected $except = [
-        'api.access_token','api.lead', 'api.transaction', 'gethook'
+        '/gethook'
     ];
 }
