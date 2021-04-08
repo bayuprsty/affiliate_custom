@@ -254,5 +254,6 @@ class AjaxController extends Controller
 
     public function getWebhook(Request $request) {
         Log::info($request);
+        logger($request);
     }
 }
