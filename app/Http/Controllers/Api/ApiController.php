@@ -11,9 +11,9 @@ use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use App\Helpers\ApiResponse;
 
-use Validator;
-use Mail;
-use Hash;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Hash;
 
 use App\Models\Lead;
 use App\Models\ServiceCommission;
@@ -118,7 +118,7 @@ class ApiController extends Controller
             $vendor = Vendor::where('secret_id', $request->header('SECRET-ID'))->first();
 
             if ($dataLead->status == Lead::SUCCESS) {
-                return APiResponse::send('Lead sudah digunakan', [], 401);
+                Lead::createNewLead($request, $dataLead);
             }
 
             if ($vendor->active == false) {
@@ -130,30 +130,34 @@ class ApiController extends Controller
             }
     
             if (!empty($dataLead)) {
-                $data = [
-                    'customer_name' => $request->customer_name,
-                    'email' => $request->email,
-                    'no_telepon' => $request->no_telepon,
-                    'date' => Carbon::NOW(),
-                    'status' => Lead::ON_PROCESS,
-                ];
-    
-                $updated = $dataLead->update($data);
-    
-                if ($updated) {
-                    $responseUpdate = [
-                        'lead_id' => $request->lead_id,
+                if (empty($dataLead->email)) {
+                    $data = [
                         'customer_name' => $request->customer_name,
                         'email' => $request->email,
                         'no_telepon' => $request->no_telepon,
-                        'date' => $dataLead->date,
-                        'status' => 'ON PROCESS',
+                        'date' => Carbon::NOW(),
+                        'status' => Lead::ON_PROCESS,
                     ];
-    
-                    return ApiResponse::send('Lead Created', $responseUpdate);
+        
+                    $updated = $dataLead->update($data);
+        
+                    if ($updated) {
+                        $responseUpdate = [
+                            'lead_id' => $request->lead_id,
+                            'customer_name' => $request->customer_name,
+                            'email' => $request->email,
+                            'no_telepon' => $request->no_telepon,
+                            'date' => $dataLead->date,
+                            'status' => 'ON PROCESS',
+                        ];
+        
+                        return ApiResponse::send('Lead Created', $responseUpdate);
+                    }
+                } else {
+                    Lead::createNewLead($request, $dataLead);
                 }
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return ApiResponse::send("Error in exception handler: " . $e->getMessage() . " (Line " . $e->getLine() . ")", array(), 501);
         }
         
@@ -250,7 +254,7 @@ class ApiController extends Controller
                 DB::commit();
                 return ApiResponse::send('Transaction Created', $transactionCreated);
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             DB::rollback();
             return ApiResponse::send("Error in exception handler: " . $e->getMessage() . " (Line " . $e->getLine() . ")", array(), 501);
         }

@@ -74,5 +74,6 @@ class Affiliate extends Model
         $url = 'https://share.tradingnyantai.com/api/setLeadData';
 
         $result = Self::postCurl($url, $headers, $body);
+        Log::info($result);
     }
 }
