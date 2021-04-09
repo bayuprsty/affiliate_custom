@@ -239,50 +239,56 @@ class TransactionController extends Controller
                             } catch (\Exception $e) {
                                 $failedMessage = $e->getMessage();
                             }
-                        }
 
-                        if ($transactionCreated) {
-                            $leadExists->update(['status' => Lead::SUCCESS]);
-
-                            $dataEmail = [
-                                'customer_name' => $transactionCreated->lead->customer_name,
-                                'email' => $this->hideEmail($transactionCreated->lead->email),
-                                'no_telepon' => $this->hidePhoneNumber($transactionCreated->lead->no_telepon),
-                                'transaction_date' => $this->convertDateView($transactionCreated->transaction_date),
-                                'amount' => $this->currencyView($transactionCreated->amount),
-                                'commission' => $this->currencyView($transactionCreated->commission)
-                            ];
-
-                            $affiliateEmail = $transactionCreated->lead->user->email;
-
-                            Mail::send('admin.transaction._email', $dataEmail, function ($message) use ($affiliateEmail) {
-                                $message->to($affiliateEmail)->subject('Affiliate Transaction Success');
-                            });
-
-                            $dataWithdrawal = [
-                                'date' => Carbon::NOW(),
-                                'user_id' => $transactionCreated->lead->user->id,
-                                'total' => $transactionCreated->commission,
-                                'withdrawal_status_id' => WithdrawalStatus::REQUEST,
-                            ];
-
-                            $withdrawalCreated = Withdrawal::create($dataWithdrawal);
-                            if ($withdrawalCreated) {
-                                $notificationData = [
-                                    'user_id' => $transactionCreated->lead->user->id,
-                                    'notification_type' => Notification::WITHDRAW,
-                                    'withdraw_id' => $withdrawalCreated->id,
+                            if ($transactionCreated) {
+                                $leadExists->update(['status' => Lead::SUCCESS]);
+    
+                                $dataEmail = [
+                                    'customer_name' => $transactionCreated->lead->customer_name,
+                                    'email' => $this->hideEmail($transactionCreated->lead->email),
+                                    'no_telepon' => $this->hidePhoneNumber($transactionCreated->lead->no_telepon),
+                                    'transaction_date' => $this->convertDateView($transactionCreated->transaction_date),
+                                    'amount' => $this->currencyView($transactionCreated->amount),
+                                    'commission' => $this->currencyView($transactionCreated->commission)
                                 ];
-            
-                                Notification::create($notificationData);
+    
+                                $affiliateEmail = $transactionCreated->lead->user->email;
+    
+                                Mail::send('admin.transaction._email', $dataEmail, function ($message) use ($affiliateEmail) {
+                                    $message->to($affiliateEmail)->subject('Affiliate Transaction Success');
+                                });
+    
+                                $dataWithdrawal = [
+                                    'date' => Carbon::NOW(),
+                                    'user_id' => $transactionCreated->lead->user->id,
+                                    'total' => $transactionCreated->commission,
+                                    'withdrawal_status_id' => WithdrawalStatus::REQUEST,
+                                ];
+    
+                                $withdrawalCreated = Withdrawal::create($dataWithdrawal);
+                                if ($withdrawalCreated) {
+                                    $notificationData = [
+                                        'user_id' => $transactionCreated->lead->user->id,
+                                        'notification_type' => Notification::WITHDRAW,
+                                        'withdraw_id' => $withdrawalCreated->id,
+                                    ];
+                
+                                    Notification::create($notificationData);
+                                }
+    
+                                $createSuccess++;
+                            } else {
+                                $failed++;
+                                $failedData[] = [
+                                    'email' => $data['Email'],
+                                    'message' => $failedMessage
+                                ];
                             }
-
-                            $createSuccess++;
                         } else {
                             $failed++;
                             $failedData[] = [
                                 'email' => $data['Email'],
-                                'message' => $failedMessage
+                                'message' => 'Email tidak ditemukan'
                             ];
                         }
                     }

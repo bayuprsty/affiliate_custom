@@ -23,9 +23,6 @@
                         <button class="btn btn-primary btn-sm float-right" id="upload-transaction"><i class="fa fa-file-csv"></i> Upload Transaction</button>
                     </div>
                     <div class="card-body">
-                        <div class="hide" id="failed">
-                            <div class="alert alert-danger" id="errorMessage"></div>
-                        </div>
                         <fieldset class="hide" id="transactionUploadForm">
                             <form id="uploadForm">
                                 <div class="card py-3 mb-shadow-2">
@@ -342,20 +339,19 @@
                     $('#transactionUploadForm').attr('disabled', true)
                     $('#loader-upload').removeClass('hide')
                 },
-                success: function (res) {
+                success: async (res) => {
                     if (res.code === 200 && res.data === '') {
                         $.notify(res.message, "success")
-                        setNullInputFile()
+                        await setNullInputFile()
                         transactionList.ajax.reload()
                     } else if(res.code == 200 && res.data !== '') {
-                        $.notify(res.message, "info");
-                        $('#failed').removeClass('hide')
-                        $('#errorMessage').html(res.message)
+                        $.notify(res.message, "info")
+                        await setNullInputFile()
                         affiliateList.ajax.reload()
                     } else {
-                        $.notify(res.message, "danger");
-                        $('#failed').removeClass('hide')
-                        $('#errorMessage').html(res.message)
+                        $.notify(res.message, "error")
+                        await setNullInputFile()
+                        affiliateList.ajax.reload()
                     }
                 }
             })
