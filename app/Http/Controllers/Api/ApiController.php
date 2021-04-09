@@ -118,7 +118,8 @@ class ApiController extends Controller
             $vendor = Vendor::where('secret_id', $request->header('SECRET-ID'))->first();
 
             if ($dataLead->status == Lead::SUCCESS) {
-                Lead::createNewLead($request, $dataLead);
+                $result = Lead::createNewLead($request, $dataLead);
+                return $result;
             }
 
             if ($vendor->active == false) {
@@ -154,7 +155,8 @@ class ApiController extends Controller
                         return ApiResponse::send('Lead Created', $responseUpdate);
                     }
                 } else {
-                    Lead::createNewLead($request, $dataLead);
+                    $result = Lead::createNewLead($request, $dataLead);
+                    return $result;
                 }
             }
         } catch (\Exception $e) {
