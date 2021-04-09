@@ -219,9 +219,8 @@ class TransactionController extends Controller
                         
                         $transactionDate = Carbon::parse($data['Tanggal Transaksi'])->format('Y-m-d');
 
-                        if ($leadExists) {
+                        if ($leadExists && $leadExists->status == Lead::ON_PROCESS) {
                             try {
-                                $failedMessage = '';
                                 $commissionType = $leadExists->service->commission_type_id;
                                 $commissionValue = $leadExists->service->commission_value;
                                 $jumlahBayar = (int) $data['Jumlah Bayar'];
@@ -237,7 +236,7 @@ class TransactionController extends Controller
 
                                 $transactionCreated = Transaction::create($dataTransaction);
                             } catch (\Exception $e) {
-                                $failedMessage = $e->getMessage();
+                                $failed++;
                             }
 
                             if ($transactionCreated) {
@@ -279,17 +278,9 @@ class TransactionController extends Controller
                                 $createSuccess++;
                             } else {
                                 $failed++;
-                                $failedData[] = [
-                                    'email' => $data['Email'],
-                                    'message' => $failedMessage
-                                ];
                             }
                         } else {
                             $failed++;
-                            $failedData[] = [
-                                'email' => $data['Email'],
-                                'message' => 'Email tidak ditemukan'
-                            ];
                         }
                     }
 
@@ -298,10 +289,10 @@ class TransactionController extends Controller
                         return $this->sendResponse($resultMessage, '', 200);
                     } else if ($failed > 0 && $createSuccess > 0) {
                         $resultMessage = "$createSuccess Data Transaksi berhasil diupload, $failed Data Transaksi gagal diupload";
-                        return $this->sendResponse($resultMessage, $failedData, 200);
+                        return $this->sendResponse($resultMessage, '', 200);
                     } else {
                         $resultMessage = "$failed Transaksi gagal diupload";
-                        return $this->sendResponse($resultMessage, $failedData, 400);
+                        return $this->sendResponse($resultMessage, '', 400);
                     }
                 }
 
