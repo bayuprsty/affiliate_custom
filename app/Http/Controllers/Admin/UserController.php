@@ -49,7 +49,6 @@ class UserController extends Controller
     public function updateProfile(Request $request) {
         if ($request->ajax()) {
             $this->validate($request, [
-                'username' => 'required|string',
                 'email' => 'required|string',
                 'avatar' => 'sometimes|image|mimes:jpg,jpeg,png,svg|max:100'
             ]);
