@@ -100,7 +100,7 @@
             }
 
             table {
-                width: 80%
+                width: 60%
             }
 
             table > td {
@@ -128,17 +128,18 @@
                 <p style="text-align: justify;">
                     <h2>Hi {{ $nama_lengkap }}</h2> 
                     <br>
-                    ayo ajak teman ataupun kerabat untuk mengenal Akela Trading System dan dapatkan bonus referal mulai dari Rp 500.000,- ! Caranya sangat mudah, Anda tinggal membagikan referal link yang ada di email ini kepada teman atau kerabat Anda. Untuk informasi lebih lanjut silahkan kunjungi: https://tradingnyantai.com/affiliate
+                    <span style="font-size: 14px;">
+                        ayo ajak teman ataupun kerabat untuk mengenal Akela Trading System dan dapatkan bonus referal mulai dari Rp 500.000,- ! Caranya sangat mudah, Anda tinggal membagikan referal link yang ada di email ini kepada teman atau kerabat Anda. Untuk informasi lebih lanjut silahkan kunjungi: https://tradingnyantai.com/affiliate
+                    </span>
                 </p>
                 <h4>Berikut adalah Link yang bisa anda bagikan : </h4>
-                <br/>
                 @foreach ($serviceList as $service)
                     <input type="text" class="form-control" value="{{$service['link']['Website']}}" readonly>
                     <br/>
                     <br/>
                     <table class="table">
                         <tr>
-                            <td>Share Media Sosial : </td>
+                            <td width="30%">Share Media Sosial : </td>
                             <td>
                                 <a title="Share on Facebook" href="https://www.facebook.com/sharer/sharer.php?u={{$service['link']['Facebook']}}&text={{$service['marketing_text'][$service['service_id']]}}" target="_blank">
                                     <img src="http://share.tradingnyantai.com/img/facebook-logo.png" width="30" height="30">
