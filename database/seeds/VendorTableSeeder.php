@@ -13,32 +13,12 @@ class VendorTableSeeder extends Seeder
     public function run()
     {
         Vendor::create([
-            'name' => 'Higi',
-            'link' => 'https://higilab.com',
-            'link_embed' => 'https://higilab.com',
-            'marketing_text' => 'https://higilab.com',
-            'no_telepon' => '+6231 599 5042',
-            'email' => 'info@higilab.com',
-            'jalan' => 'Galaxi Klampis Asri Selatan VIII Blok L4-12',
-            'provinsi' => 'Jawa Timur',
-            'kabupaten_kota' => 'Surabaya',
-            'kecamatan' => 'Sukolilo',
-            'kodepos' => '60119',
-            'secret_id' => Str::random(30),
-        ]);
-
-        Vendor::create([
-            'name' => 'Picodio',
-            'link' => 'https://picodio.com/id/',
-            'link_embed' => 'https://picodio.com/id/',
-            'marketing_text' => 'https://picodio.com/id/',
-            'no_telepon' => '+62 21 806 04289',
-            'email' => 'info@picodio.com',
-            'jalan' => 'Galaxi Klampis Asri Selatan VIII Blok L4-12',
-            'provinsi' => 'Jawa Timur',
-            'kabupaten_kota' => 'Surabaya',
-            'kecamatan' => 'Sukolilo',
-            'kodepos' => '60119',
+            'name' => 'Akela',
+            'link' => 'https://tradingnyantai.com',
+            'link_embed' => 'https://tradingnyantai.com',
+            'marketing_text' => 'https://tradingnyantai.com',
+            'no_telepon' => '081235158353',
+            'email' => 'tradingnyantai@gmail.com',
             'secret_id' => Str::random(30),
         ]);
     }

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" />
         <style type="text/css">
             .container {
                 width: 70%;
@@ -176,6 +177,16 @@
                 background-color: #eaecf4;
                 opacity: 1;
             }
+
+            table {
+                width: 70%
+            }
+
+            table > td {
+                padding: 5px;
+                vertical-align: middle;
+                text-align: center;
+            }
             
             @media screen and (max-width: 640px) {
                 .container {
@@ -278,10 +289,45 @@
                             <h2><b>{{$vendor->name}}</b></h2>
                         @foreach ($serviceList[$vendor->id] as $service)
                             <h4>{{$service['service_name']}}</h4>
-                            <input type="text" class="form-control" value="{{$service['link_affiliate']}}" readonly>
+                            <input type="text" class="form-control" value="{{$service['link']['Website']}}" readonly>
                             <i style="margin-top: 5px; font-size: 15px;">You will get {{$service['commission']}} Per Sale</i>
                             <br/>
                             <br/>
+                            <table class="table">
+                                <tr>
+                                    <td>Share Link Sosmed : </td>
+                                    <td>
+                                        <a href="https://www.facebook.com/sharer/sharer.php?u={{$service['link']['Facebook']}}&text={{$service['marketing_text'][$service['service_id']]}}" target="_blank">
+                                            <img src="http://share.tradingnyantai.com/img/facebook-logo.png" width="30" height="30">
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a href="mailto:?subject=[SUBJECT]&body={{$service['link']['Email']}}" target="_blank">
+                                            <img src="http://share.tradingnyantai.com/img/email-logo.png" width="30" height="30">
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a href="https://t.me/share/url?url={{$service['link']['Telegram']}}" target="_blank">
+                                            <img src="http://share.tradingnyantai.com/img/telegram-logo.png" width="30" height="30">
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a href="https://api.whatsapp.com/send?text={{$service['link']['Whatsapp']}}" data-action="share/whatsapp/share" target="_blank">
+                                            <img src="http://share.tradingnyantai.com/img/whatsapp-logo.png" width="30" height="30">
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a href="https://www.linkedin.com/shareArticle?mini=true&url={{$service['link']['LinkedIn']}}" target="_blank">
+                                            <img src="http://share.tradingnyantai.com/img/linkedin-logo.png" width="30" height="30">
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a href="https://twitter.com/share?url={{$service['link']['Twitter']}}" target="_blank">
+                                            <img src="http://share.tradingnyantai.com/img/twitter-logo.png" width="30" height="30">
+                                        </a>
+                                    </td>
+                                </tr>
+                            </table>
                         @endforeach
                     @endforeach
                 </center>

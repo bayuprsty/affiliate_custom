@@ -23,9 +23,6 @@
                         <button class="btn btn-primary btn-sm float-right" id="uploadAffiliate"><i class="fas fa-file-csv mr-1"></i> Upload Data Affiliate</button>
                     </div>
                     <div class="card-body">
-                        <div class="hide" id="failed">
-                            <div class="alert alert-danger" id="errorMessage"></div>
-                        </div>
                         <fieldset class="hide" id="affiliateUploadForm">
                             <form id="uploadForm">
                                 <div class="card py-3 mb-shadow-2">
@@ -43,10 +40,16 @@
                             </form>
                             <hr>
                         </fieldset>
-                        <div class="col-md-12">
-                            <table class="table table-hover table-outline" id="affiliate_list" style="font-size: 13px;">
-                            </table>
-                        </div>
+                        <fieldset id="tableAffiliate">
+                            <div class="col-md-12">
+                                <button class="btn btn-danger btn-sm" id="resendEmailLink"><i class="fas fa-envelope"></i> Resend Email Link Affiliate</button>
+                            </div>
+                            <hr>
+                            <div class="col-md-12">
+                                <table class="table table-hover table-outline" id="affiliate_list" style="font-size: 13px;">
+                                </table>
+                            </div>
+                        </fieldset>
                     </div>
                 </div>
             </div>
@@ -57,11 +60,13 @@
 @endsection
 
 @section('js')
-<script>
-    $(async function() {
+<script type="text/javascript">
+    $(async () => {
         let affiliateList;
         let detailTransactionAffiliate;
         let upload = false;
+        let allChecked = false;
+        let resendSuccess = 0
 
         dataAffiliateList();
 
@@ -133,45 +138,64 @@
                     $('#affiliateUploadForm').attr('disabled', true)
                     $('#loader').removeClass('hide')
                 },
-                success: function (res) {
+                success: async (res) => {
                     if (res.code == 200 && res.data === '') {
                         $.notify(res.message, "success");
-                        setNullInputFile()
-                        affiliateList.ajax.reload()
+                        window.setTimeout(function(){
+                            location.reload()
+                        }, 1000)
                     } else if (res.code == 200 && res.data !== '') {
                         $.notify(res.message, "info");
-                        $('#failed').removeClass('hide')
-                        $('#errorMessage').html(res.message)
-                        affiliateList.ajax.reload()
+                        window.setTimeout(function(){
+                            location.reload()
+                        }, 1000)
                     } else {
-                        $.notify(res.message, "danger");
-                        $('#failed').removeClass('hide')
-                        $('#errorMessage').html(res.message)
+                        $.notify(res.message, "danger")
                     }
                 }
             })
         })
 
-        $('body').on('click', '#resendEmailLink', function() {
-            let userID = $(this).data('id')
-            
-            $.ajax({
-                url: "{{ route('affiliate.resendEmail') }}",
-                method: "GET",
-                datatype: "JSON",
-                data: {
-                    userID: userID
-                },
-                beforeSend: function() {
-                    $(`.btnlink_${userID}`).attr('disabled', true)
-                },
-                success: function (res) {
-                    if (res.code == 200) {
-                        $.notify(res.message, "success")
-                        $(`.btnlink_${userID}`).attr('disabled', false)
+        // Check Box Affiliate
+
+        $('#checkAll').on('click', function(e) {
+            allChecked = !allChecked
+            $('input[type="checkbox"]').prop('checked', allChecked)
+        })
+
+        $('body').on('click', '#resendEmailLink', async() => {
+            let dataChecked = $('input[type="checkbox"]:checked')
+            let fieldset = document.getElementById('tableAffiliate')
+            let arrayID = []
+
+            if (dataChecked.length == 0) {
+                $.notify("Tidak ada data yang dicentang. Silahkan pilih / centang User terlebih dahulu", "error");
+            } else {
+                dataChecked.each(function() {
+                    let userID = $(this).val()
+                    if (userID !== "") {
+                        arrayID.push($(this).val())
                     }
-                }
-            })
+                })
+
+                $.ajax({
+                    url: "{{ route('affiliate.resendEmail') }}",
+                    method: "GET",
+                    datatype: "JSON",
+                    data: {
+                        arrayID: arrayID
+                    },
+                    beforeSend: function() {
+                        fieldset.disabled = true
+                    },
+                    success: function (res) {
+                        if (res.code == 200) {
+                            $.notify(res.message, "success")
+                            fieldset.disabled = false
+                        }
+                    }
+                })
+            }
         })
 
         function setNullInputFile() {
@@ -187,13 +211,7 @@
             affiliateList = $('#affiliate_list').DataTable({
                 processing: true,
                 serverside: true,
-                bLengthChange : false,
-                dom: '<"toolbar">frtip',
-                initComplete: function(){
-                    $("div.toolbar")
-                        .html('<button id="vendor-button" style="float: left;" class="btn btn-dark btn-sm" style="margin-left: 15px;">Data Per Vendor</button>');
-                    $("#affiliate_list").wrap("<div style='overflow:auto; width:100%;position:relative;'></div>");
-                },
+                bLengthChange : true,
                 ajax: {
                     url: "{{ route('datatableAffiliateAdmin') }}",
                 },
@@ -202,9 +220,9 @@
                 ],
                 columns: [
                     {
-                        title: 'No',
-                        data: 'DT_RowIndex',
-                        name: 'DT_RowIndex',
+                        title: `<input type="checkbox" class="icheckbox_square mr-2" id="checkAll" value="">All`,
+                        data: 'checkbox',
+                        name: 'checkbox',
                     },  
                     {
                         title: 'Nama Lengkap',
@@ -215,67 +233,6 @@
                         title: 'Balance',
                         data: 'balance',
                         name: 'balance'
-                    },
-                    {
-                        title: 'Commission',
-                        data: 'commission',
-                        name: 'commission'
-                    },
-                    {
-                        title: 'Click',
-                        data: 'click',
-                        name: 'click'
-                    },
-                    {
-                        title: 'Signup',
-                        data: 'signup',
-                        name: 'signup'
-                    },
-                    {
-                        title: 'Conversion',
-                        data: 'conversion',
-                        name: 'conversion'
-                    },
-                    {
-                        data: 'action',
-                        name: 'action'
-                    }
-                ],
-            });
-        }
-
-        function dataVendorList() {
-            affiliateList = $('#affiliate_list').DataTable({
-                processing: true,
-                serverside: true,
-                bLengthChange : false,
-                dom: '<"toolbar">frtip',
-                initComplete: function(){
-                    $("div.toolbar")
-                        .html('<button id="affiliate-button" style="float: left;" class="btn btn-dark btn-sm" style="margin-left: 15px;">Data Per User</button>');           
-                    $("#affiliate_list").wrap("<div style='overflow:auto; width:100%;position:relative;'></div>");
-                },
-                ajax: {
-                    url: "{{ route('datatableAffiliateVendorAdmin') }}",
-                },
-                columnDefs: [
-                    { orderable: false, targets: [0, 3, 4, 5, 6, 7] },
-                ],
-                columns: [
-                    {
-                        title: 'No',
-                        data: 'DT_RowIndex',
-                        name: 'DT_RowIndex',
-                    },  
-                    {
-                        title: 'Username',
-                        data: 'username',
-                        name: 'username'
-                    },
-                    {
-                        title: 'Vendor',
-                        data: 'vendor_name',
-                        name: 'vendor_name'
                     },
                     {
                         title: 'Commission',

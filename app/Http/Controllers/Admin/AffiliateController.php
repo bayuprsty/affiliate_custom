@@ -142,7 +142,7 @@ class AffiliateController extends Controller
                     $userUpdated = $userCreated = NULL;
 
                     $url = URL::to('/').'/share/';
-                    $media = Media::where('name', 'Website')->first();
+                    $media = Media::get()->keyBy('name');
 
                     $serviceCommission = ServiceCommission::whereHas('vendor', function($query) {
                         $query->where('active', true);
@@ -181,12 +181,21 @@ class AffiliateController extends Controller
                             if ($userCreated) {
                                 $dataService = [];
                                 $vendorHasService = [];
+
                                 foreach ($serviceCommission as $idxVendor => $service) {
                                     if (!in_array($service->vendor_id, $vendorHasService)) {$vendorHasService[] = $service->vendor_id;} else {continue;}
+                                    $marketing_text[$service->id] = "'".$service->marketing_text."'";
+
+                                    foreach ($media as $key => $value) {
+                                        $link[$key] = $url.$service->id.'.'.$userCreated->id.'.'.$value->id;
+                                    }
+
                                     $dataService[$service->vendor_id][] = [
+                                        'service_id' => $service->id,
                                         'commission' => $service->commission_type_id == 1 ? 'Rp. '.$service->commission_value : $service->commission_value.'%',
                                         'service_name' => $service->title,
-                                        'link_affiliate' => $url.$service->id.'.'.$userCreated->id.'.'.$media->id,
+                                        'link' => $link,
+                                        'marketing_text' => $marketing_text
                                     ];
                                 }
 
@@ -230,9 +239,9 @@ class AffiliateController extends Controller
     public function resendEmailLinkAffiliate(Request $request) {
         if ($request->ajax()) {
             $url = URL::to('/').'/share/';
-            $media = Media::where('name', 'Website')->first();
+            $media = Media::get()->keyBy('name');
 
-            $user = User::where('id', $request->userID)->first(['id','nama_depan','nama_belakang','email']);
+            $userList = User::whereIn('id', $request->arrayID)->get(['id','nama_depan','nama_belakang','email']);
 
             $serviceCommission = ServiceCommission::whereHas('vendor', function ($query) {
                 $query->where('active', true);
@@ -240,25 +249,36 @@ class AffiliateController extends Controller
 
             $vendorHasService = [];
 
-            foreach ($serviceCommission as $idxVendor => $service) {
-                if (!in_array($service->vendor_id, $vendorHasService)) {$vendorHasService[] = $service->vendor_id;}
-                $dataService[$service->vendor_id][] = [
-                    'commission' => $service->commission_type_id == 1 ? 'Rp. '.$service->commission_value : $service->commission_value.'%',
-                    'service_name' => $service->title,
-                    'link_affiliate' => $url.$service->id.'.'.$user->id.'.'.$media->id,
+            foreach ($userList as $key => $user) {
+                foreach ($serviceCommission as $idxVendor => $service) {
+                    if (!in_array($service->vendor_id, $vendorHasService)) {$vendorHasService[] = $service->vendor_id;}
+                    
+                    $marketing_text[$service->id] = "'".$service->marketing_text."'";
+    
+                    foreach ($media as $key => $value) {
+                        $link[$key] = $url.$service->id.'.'.$user->id.'.'.$value->id;
+                    }
+    
+                    $dataService[$service->vendor_id][] = [
+                        'service_id' => $service->id,
+                        'commission' => $service->commission_type_id == 1 ? 'Rp. '.$service->commission_value : $service->commission_value.'%',
+                        'service_name' => $service->title,
+                        'link' => $link,
+                        'marketing_text' => $marketing_text
+                    ];
+                }
+    
+                $dataMail = [
+                    'nama_lengkap' => $user->nama_depan.' '.$user->nama_belakang,
+                    'serviceList' => $dataService,
+                    'vendorList' => Vendor::where('active', true)->whereIn('id', $vendorHasService)->get()
                 ];
+    
+                
+                Mail::send(['html' => 'admin.affiliate.email_link_affiliate'], $dataMail, function($message) use ($user) {
+                    $message->to($user->email)->subject('Email Link Affiliate');
+                });
             }
-
-            $dataMail = [
-                'nama_lengkap' => $user->nama_depan.' '.$user->nama_belakang,
-                'serviceList' => $dataService,
-                'vendorList' => Vendor::where('active', true)->whereIn('id', $vendorHasService)->get()
-            ];
-
-            
-            Mail::send(['html' => 'admin.affiliate.email_link_affiliate'], $dataMail, function($message) use ($user) {
-                $message->to($user->email)->subject('Email Link Affiliate');
-            });
 
             $messages = 'Email Link Affiliate Resend Successfully';
             return $this->sendResponse($messages, '', 200);

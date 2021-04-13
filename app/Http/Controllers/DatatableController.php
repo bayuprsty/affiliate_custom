@@ -160,7 +160,10 @@ class DatatableController extends Controller
             )->groupBy('clicks.user_id')->get()->keyBy('user_id')->toArray();
 
             return DataTables::of($user)
-                        ->addIndexColumn()
+                        // ->addIndexColumn()
+                        ->addColumn('checkbox', function ($row) {
+                            return "<input type=\"checkbox\" class=\"icheckbox_square\" value=\"$row->user_id\">";
+                        })
                         ->editColumn('username', function($row) {
                             return '<a href="'.route('user.detailUser', $row->user_id).'">'.$row->nama_depan.' '.$row->nama_belakang.'</a>';
                         })
@@ -194,13 +197,12 @@ class DatatableController extends Controller
                             $btn = '<div class="form-inline row">
                                         <center>
                                             <button id="detailAffiliate" class="btn btn-info btn-sm btn-circle mr-2" title="Detail" data-id="'.$row->user_id.'"><i class="fa fa-eye"></i></button>
-                                            <button id="resendEmailLink" class="btn btn-danger btn-sm btnlink_'.$row['user_id'].'" title="Resend Email Link Affiliate" data-id="'.$row['user_id'].'"><i class="fas fa-envelope mr-1"></i>Resend Link</button>
                                         </center>
                                     </div>';
 
                             return $btn;
                         })
-                        ->rawColumns(['username', 'action'])
+                        ->rawColumns(['checkbox', 'username', 'action'])
                         ->make(true);
         }
     }

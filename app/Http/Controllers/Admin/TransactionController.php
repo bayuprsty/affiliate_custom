@@ -178,7 +178,7 @@ class TransactionController extends Controller
             "Expires"             => "0"
         );
 
-        $listColumn = ['Email', 'Tanggal Transaksi', 'Jumlah Bayar'];
+        $listColumn = ['Email', 'Tanggal Transaksi', 'Jumlah Bayar', 'Komisi'];
 
         $callback = function() use ($listColumn) {
             $file = fopen('php://output', 'w');
@@ -231,7 +231,7 @@ class TransactionController extends Controller
                                     'service_commission_id' => $leadExists->service_id,
                                     'transaction_date' => $transactionDate,
                                     'amount' => $jumlahBayar,
-                                    'commission' => $commission,
+                                    'commission' => !empty($data['Komisi']) ? (int) $data['Komisi'] : $commission,
                                 ];
 
                                 $transactionCreated = Transaction::create($dataTransaction);

@@ -10,6 +10,7 @@
     @yield('title')
 
     <link href="{{ asset('sbadmin2-theme/vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ asset('icheck/skins/all.css') }}" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
     <link href="{{ asset('sbadmin2-theme/vendor/datatables/dataTables.bootstrap4.min.css')}}" rel="stylesheet" type="text/css">
     <!-- Custom styles for this template-->
@@ -49,6 +50,7 @@
 
     <!-- Core plugin JavaScript-->
     <script src="{{ asset('sbadmin2-theme/vendor/jquery-easing/jquery.easing.min.js')}}"></script>
+    <script src="{{ asset('icheck/icheck.min.js?v=1.0.3')}}"></script>
 
     <!-- Custom scripts for all pages-->
     <script src="{{ asset('sbadmin2-theme/js/sb-admin-2.min.js')}}"></script>
