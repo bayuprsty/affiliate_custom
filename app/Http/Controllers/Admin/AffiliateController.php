@@ -190,7 +190,7 @@ class AffiliateController extends Controller
                                         $link[$key] = $url.$service->id.'.'.$userCreated->id.'.'.$value->id;
                                     }
 
-                                    $dataService[$service->vendor_id][] = [
+                                    $dataService[] = [
                                         'service_id' => $service->id,
                                         'commission' => $service->commission_type_id == 1 ? 'Rp. '.$service->commission_value : $service->commission_value.'%',
                                         'service_name' => $service->title,
@@ -202,7 +202,6 @@ class AffiliateController extends Controller
                                 $dataMail = [
                                     'nama_lengkap' => $data['Nama Depan'].' '.$data['Nama Belakang'],
                                     'serviceList' => $dataService,
-                                    'vendorList' => Vendor::where('active', true)->get()
                                 ];
 
                                 Mail::send(['html' => 'admin.affiliate.email_link_affiliate'], $dataMail, function($message) use ($data) {
@@ -247,22 +246,16 @@ class AffiliateController extends Controller
                 $query->where('active', true);
             })->get();
 
-            $vendorHasService = [];
-
             foreach ($userList as $key => $user) {
                 foreach ($serviceCommission as $idxVendor => $service) {
-                    if (!in_array($service->vendor_id, $vendorHasService)) {$vendorHasService[] = $service->vendor_id;}
-                    
                     $marketing_text[$service->id] = "'".$service->marketing_text."'";
     
                     foreach ($media as $key => $value) {
                         $link[$key] = $url.$service->id.'.'.$user->id.'.'.$value->id;
                     }
     
-                    $dataService[$service->vendor_id][] = [
+                    $dataService[] = [
                         'service_id' => $service->id,
-                        'commission' => $service->commission_type_id == 1 ? 'Rp. '.$service->commission_value : $service->commission_value.'%',
-                        'service_name' => $service->title,
                         'link' => $link,
                         'marketing_text' => $marketing_text
                     ];
@@ -271,7 +264,6 @@ class AffiliateController extends Controller
                 $dataMail = [
                     'nama_lengkap' => $user->nama_depan.' '.$user->nama_belakang,
                     'serviceList' => $dataService,
-                    'vendorList' => Vendor::where('active', true)->whereIn('id', $vendorHasService)->get()
                 ];
     
                 

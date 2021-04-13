@@ -5,7 +5,6 @@
         <style type="text/css">
             .container {
                 width: 70%;
-                text-align: center;
                 margin: auto;
                 font-family: sans-serif;
             }
@@ -27,86 +26,8 @@
             
             .content {
                 padding: 2rem 1rem;
-                text-align: center;
                 border: 1px solid #4e73df;
-            }
-
-            .btn {
-                display: inline-block;
-                font-weight: 400;
-                color: #858796;
-                text-align: center;
-                vertical-align: middle;
-                -webkit-user-select: none;
-                -moz-user-select: none;
-                -ms-user-select: none;
-                user-select: none;
-                background-color: transparent;
-                border: 1px solid transparent;
-                padding: 0.375rem 0.75rem;
-                font-size: 1rem;
-                line-height: 1.5;
-                border-radius: 0.35rem;
-                transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-            }
-
-            @media (prefers-reduced-motion: reduce) {
-                .btn {
-                    transition: none;
-                }
-            }
-
-            .btn:hover {
-                color: #858796;
-                text-decoration: none;
-            }
-
-            .btn:focus, .btn.focus {
-                outline: 0;
-                box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25);
-            }
-
-            a.btn.disabled,
-                fieldset:disabled a.btn {
-                pointer-events: none;
-            }
-
-            .btn-primary {
-                color: #ffffff;
-                background-color: #4e73df;
-                border-color: #4e73df;
-            }
-
-            .btn-primary:hover {
-                color: #ffffff;
-                background-color: #2e59d9;
-                border-color: #2653d4;
-            }
-
-            .btn-primary:focus, .btn-primary.focus {
-                color: #ffffff;
-                background-color: #2e59d9;
-                border-color: #2653d4;
-                box-shadow: 0 0 0 0.2rem rgba(105, 136, 228, 0.5);
-            }
-
-            .btn-primary.disabled, .btn-primary:disabled {
-                color: #fff;
-                background-color: #4e73df;
-                border-color: #4e73df;
-            }
-
-            .btn-primary:not(:disabled):not(.disabled):active, .btn-primary:not(:disabled):not(.disabled).active,
-            .show > .btn-primary.dropdown-toggle {
-                color: #fff;
-                background-color: #2653d4;
-                border-color: #244ec9;
-            }
-
-            .btn-primary:not(:disabled):not(.disabled):active:focus, .btn-primary:not(:disabled):not(.disabled).active:focus,
-            .show > .btn-primary.dropdown-toggle:focus {
-                box-shadow: 0 0 0 0.2rem rgba(105, 136, 228, 0.5);
-            }
+            }            
 
             .form-control {
                 display: block;
@@ -179,7 +100,7 @@
             }
 
             table {
-                width: 70%
+                width: 80%
             }
 
             table > td {
@@ -193,82 +114,6 @@
                     width: 100%;
                     border-radius: 10%;
                 }
-                .btn {
-                    display: inline-block;
-                    font-weight: 400;
-                    color: #858796;
-                    text-align: center;
-                    vertical-align: middle;
-                    -webkit-user-select: none;
-                    -moz-user-select: none;
-                    -ms-user-select: none;
-                    user-select: none;
-                    background-color: transparent;
-                    border: 1px solid transparent;
-                    padding: 0.375rem 0.75rem;
-                    font-size: 1rem;
-                    line-height: 1.5;
-                    border-radius: 0.35rem;
-                    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-                }
-
-                @media (prefers-reduced-motion: reduce) {
-                    .btn {
-                        transition: none;
-                    }
-                }
-
-                .btn:hover {
-                    color: #858796;
-                    text-decoration: none;
-                }
-
-                .btn:focus, .btn.focus {
-                    outline: 0;
-                    box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25);
-                }
-
-                a.btn.disabled,
-                    fieldset:disabled a.btn {
-                    pointer-events: none;
-                }
-
-                .btn-primary {
-                    color: #ffffff;
-                    background-color: #4e73df;
-                    border-color: #4e73df;
-                }
-
-                .btn-primary:hover {
-                    color: #ffffff;
-                    background-color: #2e59d9;
-                    border-color: #2653d4;
-                }
-
-                .btn-primary:focus, .btn-primary.focus {
-                    color: #ffffff;
-                    background-color: #2e59d9;
-                    border-color: #2653d4;
-                    box-shadow: 0 0 0 0.2rem rgba(105, 136, 228, 0.5);
-                }
-
-                .btn-primary.disabled, .btn-primary:disabled {
-                    color: #fff;
-                    background-color: #4e73df;
-                    border-color: #4e73df;
-                }
-
-                .btn-primary:not(:disabled):not(.disabled):active, .btn-primary:not(:disabled):not(.disabled).active,
-                .show > .btn-primary.dropdown-toggle {
-                    color: #fff;
-                    background-color: #2653d4;
-                    border-color: #244ec9;
-                }
-
-                .btn-primary:not(:disabled):not(.disabled):active:focus, .btn-primary:not(:disabled):not(.disabled).active:focus,
-                .show > .btn-primary.dropdown-toggle:focus {
-                    box-shadow: 0 0 0 0.2rem rgba(105, 136, 228, 0.5);
-                }
             }
         </style>
     </head>
@@ -280,61 +125,57 @@
                 </div>
             </div>
             <div class="content">
-                <h2>Hello {{ $nama_lengkap }}</h2>
+                <p style="text-align: justify;">
+                    <h2>Hi {{ $nama_lengkap }}</h2> 
+                    <br>
+                    ayo ajak teman ataupun kerabat untuk mengenal Akela Trading System dan dapatkan bonus referal mulai dari Rp 500.000,- ! Caranya sangat mudah, Anda tinggal membagikan referal link yang ada di email ini kepada teman atau kerabat Anda. Untuk informasi lebih lanjut silahkan kunjungi: https://tradingnyantai.com/affiliate
+                </p>
+                <h4>Berikut adalah Link yang bisa anda bagikan : </h4>
                 <br/>
-                <h4>This is <b>Affiliate Link</b> You Can Share:</h4>
-                <br/>
-                <center>
-                    @foreach ($vendorList as $vendor)
-                            <h2><b>{{$vendor->name}}</b></h2>
-                        @foreach ($serviceList[$vendor->id] as $service)
-                            <h4>{{$service['service_name']}}</h4>
-                            <input type="text" class="form-control" value="{{$service['link']['Website']}}" readonly>
-                            <i style="margin-top: 5px; font-size: 15px;">You will get {{$service['commission']}} Per Sale</i>
-                            <br/>
-                            <br/>
-                            <table class="table">
-                                <tr>
-                                    <td>Share Link Sosmed : </td>
-                                    <td>
-                                        <a href="https://www.facebook.com/sharer/sharer.php?u={{$service['link']['Facebook']}}&text={{$service['marketing_text'][$service['service_id']]}}" target="_blank">
-                                            <img src="http://share.tradingnyantai.com/img/facebook-logo.png" width="30" height="30">
-                                        </a>
-                                    </td>
-                                    <td>
-                                        <a href="mailto:?subject=[SUBJECT]&body={{$service['link']['Email']}}" target="_blank">
-                                            <img src="http://share.tradingnyantai.com/img/email-logo.png" width="30" height="30">
-                                        </a>
-                                    </td>
-                                    <td>
-                                        <a href="https://t.me/share/url?url={{$service['link']['Telegram']}}" target="_blank">
-                                            <img src="http://share.tradingnyantai.com/img/telegram-logo.png" width="30" height="30">
-                                        </a>
-                                    </td>
-                                    <td>
-                                        <a href="https://api.whatsapp.com/send?text={{$service['link']['Whatsapp']}}" data-action="share/whatsapp/share" target="_blank">
-                                            <img src="http://share.tradingnyantai.com/img/whatsapp-logo.png" width="30" height="30">
-                                        </a>
-                                    </td>
-                                    <td>
-                                        <a href="https://www.linkedin.com/shareArticle?mini=true&url={{$service['link']['LinkedIn']}}" target="_blank">
-                                            <img src="http://share.tradingnyantai.com/img/linkedin-logo.png" width="30" height="30">
-                                        </a>
-                                    </td>
-                                    <td>
-                                        <a href="https://twitter.com/share?url={{$service['link']['Twitter']}}" target="_blank">
-                                            <img src="http://share.tradingnyantai.com/img/twitter-logo.png" width="30" height="30">
-                                        </a>
-                                    </td>
-                                </tr>
-                            </table>
-                        @endforeach
-                    @endforeach
-                </center>
+                @foreach ($serviceList as $service)
+                    <input type="text" class="form-control" value="{{$service['link']['Website']}}" readonly>
+                    <br/>
+                    <br/>
+                    <table class="table">
+                        <tr>
+                            <td>Share Media Sosial : </td>
+                            <td>
+                                <a title="Share on Facebook" href="https://www.facebook.com/sharer/sharer.php?u={{$service['link']['Facebook']}}&text={{$service['marketing_text'][$service['service_id']]}}" target="_blank">
+                                    <img src="http://share.tradingnyantai.com/img/facebook-logo.png" width="30" height="30">
+                                </a>
+                            </td>
+                            <td>
+                                <a title="Share on Mail" href="mailto:?subject=[SUBJECT]&body={{$service['link']['Email']}}" target="_blank">
+                                    <img src="http://share.tradingnyantai.com/img/email-logo.png" width="30" height="30">
+                                </a>
+                            </td>
+                            <td>
+                                <a title="Share on Telegram" href="https://t.me/share/url?url={{$service['link']['Telegram']}}" target="_blank">
+                                    <img src="http://share.tradingnyantai.com/img/telegram-logo.png" width="30" height="30">
+                                </a>
+                            </td>
+                            <td>
+                                <a title="Share on Whatsapp" href="https://api.whatsapp.com/send?text={{$service['link']['Whatsapp']}}" data-action="share/whatsapp/share" target="_blank">
+                                    <img src="http://share.tradingnyantai.com/img/whatsapp-logo.png" width="30" height="30">
+                                </a>
+                            </td>
+                            <td>
+                                <a title="Share on LinkedIn" href="https://www.linkedin.com/shareArticle?mini=true&url={{$service['link']['LinkedIn']}}" target="_blank">
+                                    <img src="http://share.tradingnyantai.com/img/linkedin-logo.png" width="30" height="30">
+                                </a>
+                            </td>
+                            <td>
+                                <a title="Share on Twitter" href="https://twitter.com/share?url={{$service['link']['Twitter']}}" target="_blank">
+                                    <img src="http://share.tradingnyantai.com/img/twitter-logo.png" width="30" height="30">
+                                </a>
+                            </td>
+                        </tr>
+                    </table>
+                @endforeach
             </div>
             <div class="footer">
                 <div class="footer-container">
-                    <h2>Thank You For Your Registration</h2>
+                    <h2>Terima Kasih</h2>
                 </div>
             </div>
         </div>
