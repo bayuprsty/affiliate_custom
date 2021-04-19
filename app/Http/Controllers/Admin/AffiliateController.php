@@ -248,7 +248,7 @@ class AffiliateController extends Controller
 
             foreach ($userList as $key => $user) {
                 foreach ($serviceCommission as $idxVendor => $service) {
-                    $marketing_text[$service->id] = "'".$service->marketing_text."'";
+                    $marketing_text[$service->id] = $service->marketing_text;
     
                     foreach ($media as $key => $value) {
                         $link[$key] = $url.$service->id.'.'.$user->id.'.'.$value->id;

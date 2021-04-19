@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <meta property="og:title" content="Belajar Trading Saham Amerika - Akela Trading System">
+        <meta property="og:description" content="Belajar disini cara mendapatkan penghasilan dari bursa saham Amerika. Anda bisa tahu kapan beli, kapan jual & saham apa yang bagus.">
+        <meta property="og:image" content="https://share.tradingnyantai.com/img/akela-og.jpg">
+        
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" />
         <style type="text/css">
             .container {
@@ -141,7 +145,7 @@
                         <tr>
                             <td width="30%">Share Media Sosial : </td>
                             <td>
-                                <a title="Share on Facebook" href="https://www.facebook.com/sharer/sharer.php?u={{$service['link']['Facebook']}}&text={{$service['marketing_text'][$service['service_id']]}}" target="_blank">
+                                <a title="Share on Facebook" href="https://www.facebook.com/sharer/sharer.php?u={{$service['link']['Facebook']}}&display=popup" target="_blank">
                                     <img src="http://share.tradingnyantai.com/img/facebook-logo.png" width="30" height="30">
                                 </a>
                             </td>
@@ -156,7 +160,7 @@
                                 </a>
                             </td>
                             <td>
-                                <a title="Share on Whatsapp" href="https://api.whatsapp.com/send?text={{$service['link']['Whatsapp']}}" data-action="share/whatsapp/share" target="_blank">
+                                <a title="Share on Whatsapp" href="https://api.whatsapp.com/send?text={{($service['link']['Whatsapp'])}}" data-action="share/whatsapp/share" target="_blank">
                                     <img src="http://share.tradingnyantai.com/img/whatsapp-logo.png" width="30" height="30">
                                 </a>
                             </td>

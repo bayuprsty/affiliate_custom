@@ -201,7 +201,7 @@ class AjaxController extends Controller
                         if (count($leadByIp) > 0) {
                             DB::commit();
                             $dataOldLead = $leadByIp[0];
-                            return response()->json(['url' => $service->service_link.'/?leadid='.$dataOldLead->id]);
+                            return response()->json(['url' => $service->service_link.'&leadid='.$dataOldLead->id]);
                         }
     
                         $dataLead = [
@@ -215,7 +215,7 @@ class AjaxController extends Controller
     
                         if ($success) {
                             DB::commit();
-                            return response()->json(['url' => $service->service_link.'/?leadid='.$success->id]);
+                            return response()->json(['url' => $service->service_link.'&leadid='.$success->id]);
                         }
                     }
                 } else {
@@ -241,7 +241,7 @@ class AjaxController extends Controller
     
                         if ($leadSuccess) {
                             DB::commit();
-                            return response()->json(['url' => $service->service_link.'/?leadid='.$leadSuccess->id]);
+                            return response()->json(['url' => $service->service_link.'&leadid='.$leadSuccess->id]);
                         }
                     }
                 }
