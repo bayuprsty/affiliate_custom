@@ -257,9 +257,7 @@ class AffiliateController extends Controller
                             $marketingText[$key] = rawurlencode(str_replace('{{link}}', $link[$key], $newMarketingText));
                         }
                     }
-
-                    // dd($marketingText);
-    
+                    
                     $dataService[] = [
                         'service_id' => $service->id,
                         'link' => $link,

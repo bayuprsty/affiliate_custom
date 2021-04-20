@@ -162,7 +162,7 @@
                                 </a>
                             </td>
                             <td>
-                                <a title="Share on Telegram" href="https://t.me/share/url?url={{$service['link']['Telegram']}}&text={{$service['marketing_text']['Telegram']}}" target="_blank">
+                                <a title="Share on Telegram" href="https://t.me/share/url?url={{$service['marketing_text']['Telegram']}}" target="_blank">
                                     <img src="http://share.tradingnyantai.com/img/telegram-logo.png" width="30" height="30">
                                 </a>
                             </td>
