@@ -180,22 +180,22 @@ class AffiliateController extends Controller
                             $createUpdateSuccess++;
                             if ($userCreated) {
                                 $dataService = [];
-                                $vendorHasService = [];
 
                                 foreach ($serviceCommission as $idxVendor => $service) {
-                                    if (!in_array($service->vendor_id, $vendorHasService)) {$vendorHasService[] = $service->vendor_id;} else {continue;}
-                                    $marketing_text[$service->id] = "'".$service->marketing_text."'";
+                                    $arrText = explode("\r\n", $service->marketing_text);
+                                    $newMarketingText = implode("\n", $arrText);
 
                                     foreach ($media as $key => $value) {
                                         $link[$key] = $url.$service->id.'.'.$userCreated->id.'.'.$value->id;
+                                        if ($key !== 'Website') {
+                                            $marketingText[$key] = rawurlencode(str_replace('{{link}}', $link[$key], $newMarketingText));
+                                        }
                                     }
 
                                     $dataService[] = [
                                         'service_id' => $service->id,
-                                        'commission' => $service->commission_type_id == 1 ? 'Rp. '.$service->commission_value : $service->commission_value.'%',
-                                        'service_name' => $service->title,
                                         'link' => $link,
-                                        'marketing_text' => $marketing_text
+                                        'marketing_text' => $marketingText
                                     ];
                                 }
 
@@ -257,7 +257,7 @@ class AffiliateController extends Controller
                             $marketingText[$key] = rawurlencode(str_replace('{{link}}', $link[$key], $newMarketingText));
                         }
                     }
-                    
+
                     $dataService[] = [
                         'service_id' => $service->id,
                         'link' => $link,
