@@ -2,6 +2,7 @@
 
 namespace App\Models\Api;
 
+use App\Models\Lead;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
 
@@ -53,7 +54,9 @@ class Affiliate extends Model
     }
 
     public static function setLeadApi($client, $leadID) {
-        $secretID = 'nofdB3nmknTYa7u8HQRzwjLfkw4RhT';
+        $dataLead = Lead::with('vendor')->where('id', $leadID)->first();
+        
+        $secretID = $dataLead->vendor->secret_id;
         $token = Self::getToken($secretID);
 
         $body = [

@@ -256,7 +256,9 @@ class AjaxController extends Controller
         if (!is_null($request['customer_note'])) {
             Affiliate::setLeadApi($request['billing'], $request['customer_note']);
         } else {
-            $secretID = 'nofdB3nmknTYa7u8HQRzwjLfkw4RhT';
+            $dataLead = Lead::with('vendor')->where('id', $request['customer_note'])->first();
+        
+            $secretID = $dataLead->vendor->secret_id;
             $token = Affiliate::getToken($secretID);
 
             Log::info($token);
