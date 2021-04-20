@@ -1,10 +1,17 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="Belajar disini cara mendapatkan penghasilan dari bursa saham Amerika. Anda bisa tahu kapan beli, kapan jual & saham apa yang bagus.">
+        <meta name="author" content="">
+
         <meta property="og:title" content="Belajar Trading Saham Amerika - Akela Trading System">
+        <meta property="og:type" content="website">
         <meta property="og:description" content="Belajar disini cara mendapatkan penghasilan dari bursa saham Amerika. Anda bisa tahu kapan beli, kapan jual & saham apa yang bagus.">
         <meta property="og:image" content="https://share.tradingnyantai.com/img/akela-og.jpg">
-        
+
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" />
         <style type="text/css">
             .container {
@@ -145,32 +152,32 @@
                         <tr>
                             <td width="30%">Share Media Sosial : </td>
                             <td>
-                                <a title="Share on Facebook" href="https://www.facebook.com/sharer/sharer.php?u={{$service['link']['Facebook']}}&display=popup" target="_blank">
+                                <a title="Share on Facebook" href="https://www.facebook.com/sharer/sharer.php?u={{$service['link']['Facebook']}}&p[title]={{$service['marketing_text']}}" target="_blank">
                                     <img src="http://share.tradingnyantai.com/img/facebook-logo.png" width="30" height="30">
                                 </a>
                             </td>
                             <td>
-                                <a title="Share on Mail" href="mailto:?subject=[SUBJECT]&body={{$service['link']['Email']}}" target="_blank">
+                                <a title="Share on Mail" href="mailto:?body={{$service['marketing_text']." : ".$service['link']['Email']}}" target="_blank">
                                     <img src="http://share.tradingnyantai.com/img/email-logo.png" width="30" height="30">
                                 </a>
                             </td>
                             <td>
-                                <a title="Share on Telegram" href="https://t.me/share/url?url={{$service['link']['Telegram']}}" target="_blank">
+                                <a title="Share on Telegram" href="https://t.me/share/url?url={{$service['link']['Telegram']}}&text={{$service['marketing_text']." : ".$service['link']['Telegram']}}" target="_blank">
                                     <img src="http://share.tradingnyantai.com/img/telegram-logo.png" width="30" height="30">
                                 </a>
                             </td>
                             <td>
-                                <a title="Share on Whatsapp" href="https://api.whatsapp.com/send?text={{($service['link']['Whatsapp'])}}" data-action="share/whatsapp/share" target="_blank">
+                                <a title="Share on Whatsapp" href="https://api.whatsapp.com/send?text={{$service['marketing_text']." : ".$service['link']['Whatsapp']}}" data-action="share/whatsapp/share" target="_blank">
                                     <img src="http://share.tradingnyantai.com/img/whatsapp-logo.png" width="30" height="30">
                                 </a>
                             </td>
-                            <td>
-                                <a title="Share on LinkedIn" href="https://www.linkedin.com/shareArticle?mini=true&url={{$service['link']['LinkedIn']}}" target="_blank">
+                            {{-- <td>
+                                <a title="Share on LinkedIn" href="https://www.linkedin.com/shareArticle?mini=true&url={{$service['link']['LinkedIn']}}&title={{$service['marketing_text']}}" target="_blank">
                                     <img src="http://share.tradingnyantai.com/img/linkedin-logo.png" width="30" height="30">
                                 </a>
-                            </td>
+                            </td> --}}
                             <td>
-                                <a title="Share on Twitter" href="https://twitter.com/share?url={{$service['link']['Twitter']}}" target="_blank">
+                                <a title="Share on Twitter" href="https://twitter.com/intent/tweet?text={{$service['marketing_text']." : ".$service['link']['Twitter']}}" target="_blank">
                                     <img src="http://share.tradingnyantai.com/img/twitter-logo.png" width="30" height="30">
                                 </a>
                             </td>

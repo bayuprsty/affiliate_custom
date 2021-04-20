@@ -248,8 +248,9 @@ class AffiliateController extends Controller
 
             foreach ($userList as $key => $user) {
                 foreach ($serviceCommission as $idxVendor => $service) {
-                    $marketing_text[$service->id] = $service->marketing_text;
-    
+                    $arrText = explode("\r\n", $service->marketing_text);
+                    $newMarketingText = implode("\n", $arrText);
+                    
                     foreach ($media as $key => $value) {
                         $link[$key] = $url.$service->id.'.'.$user->id.'.'.$value->id;
                     }
@@ -257,8 +258,10 @@ class AffiliateController extends Controller
                     $dataService[] = [
                         'service_id' => $service->id,
                         'link' => $link,
-                        'marketing_text' => $marketing_text
+                        'marketing_text' => rawurlencode($newMarketingText)
                     ];
+                    // dd($dataService);
+                    // dd(nl2br($marketing_text[$service->id]));
                 }
     
                 $dataMail = [
