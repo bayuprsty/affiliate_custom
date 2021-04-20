@@ -253,12 +253,17 @@ class AffiliateController extends Controller
                     
                     foreach ($media as $key => $value) {
                         $link[$key] = $url.$service->id.'.'.$user->id.'.'.$value->id;
+                        if ($key !== 'Website') {
+                            $marketingText[$key] = rawurlencode(str_replace('{{link}}', $link[$key], $newMarketingText));
+                        }
                     }
+
+                    // dd($marketingText);
     
                     $dataService[] = [
                         'service_id' => $service->id,
                         'link' => $link,
-                        'marketing_text' => rawurlencode($newMarketingText)
+                        'marketing_text' => $marketingText
                     ];
                     // dd($dataService);
                     // dd(nl2br($marketing_text[$service->id]));

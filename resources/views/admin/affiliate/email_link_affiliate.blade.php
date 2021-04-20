@@ -152,22 +152,22 @@
                         <tr>
                             <td width="30%">Share Media Sosial : </td>
                             <td>
-                                <a title="Share on Facebook" href="https://www.facebook.com/sharer/sharer.php?u={{$service['link']['Facebook']}}&p[title]={{$service['marketing_text']}}" target="_blank">
+                                <a title="Share on Facebook" href="https://www.facebook.com/sharer/sharer.php?u={{$service['link']['Facebook']}}&p[title]={{$service['marketing_text']['Facebook']}}" target="_blank">
                                     <img src="http://share.tradingnyantai.com/img/facebook-logo.png" width="30" height="30">
                                 </a>
                             </td>
                             <td>
-                                <a title="Share on Mail" href="mailto:?body={{$service['marketing_text']." : ".$service['link']['Email']}}" target="_blank">
+                                <a title="Share on Mail" href="mailto:?body={{$service['marketing_text']['Email']}}" target="_blank">
                                     <img src="http://share.tradingnyantai.com/img/email-logo.png" width="30" height="30">
                                 </a>
                             </td>
                             <td>
-                                <a title="Share on Telegram" href="https://t.me/share/url?url={{$service['link']['Telegram']}}&text={{$service['marketing_text']." : ".$service['link']['Telegram']}}" target="_blank">
+                                <a title="Share on Telegram" href="https://t.me/share/url?url={{$service['link']['Telegram']}}&text={{$service['marketing_text']['Telegram']}}" target="_blank">
                                     <img src="http://share.tradingnyantai.com/img/telegram-logo.png" width="30" height="30">
                                 </a>
                             </td>
                             <td>
-                                <a title="Share on Whatsapp" href="https://api.whatsapp.com/send?text={{$service['marketing_text']." : ".$service['link']['Whatsapp']}}" data-action="share/whatsapp/share" target="_blank">
+                                <a title="Share on Whatsapp" href="https://api.whatsapp.com/send?text={{$service['marketing_text']['Whatsapp']}}" data-action="share/whatsapp/share" target="_blank">
                                     <img src="http://share.tradingnyantai.com/img/whatsapp-logo.png" width="30" height="30">
                                 </a>
                             </td>
@@ -177,7 +177,7 @@
                                 </a>
                             </td> --}}
                             <td>
-                                <a title="Share on Twitter" href="https://twitter.com/intent/tweet?text={{$service['marketing_text']." : ".$service['link']['Twitter']}}" target="_blank">
+                                <a title="Share on Twitter" href="https://twitter.com/intent/tweet?text={{$service['marketing_text']['Twitter']}}" target="_blank">
                                     <img src="http://share.tradingnyantai.com/img/twitter-logo.png" width="30" height="30">
                                 </a>
                             </td>
