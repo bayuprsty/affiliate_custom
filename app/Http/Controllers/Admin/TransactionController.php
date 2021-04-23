@@ -127,7 +127,7 @@ class TransactionController extends Controller
     }
 
     public function downloadPdf($status, $start_date, $end_date) {
-        $transaction = Transaction::leftJoin('leads', 'leads.id', '=', 'transactions.lead_id')->where('leads.user_id', Auth::id());
+        $transaction = Transaction::all();
         if ($status !== 'all') {
             if ($status == Lead::ON_PROCESS) {
                 $transaction->where('leads.status', Lead::ON_PROCESS);
@@ -242,22 +242,23 @@ class TransactionController extends Controller
                             if ($transactionCreated) {
                                 $leadExists->update(['status' => Lead::SUCCESS]);
     
-                                $dataEmail = [
-                                    'customer_name' => $transactionCreated->lead->customer_name,
-                                    'email' => $this->hideEmail($transactionCreated->lead->email),
-                                    'no_telepon' => $this->hidePhoneNumber($transactionCreated->lead->no_telepon),
-                                    'transaction_date' => $this->convertDateView($transactionCreated->transaction_date),
-                                    'amount' => $this->currencyView($transactionCreated->amount),
-                                    'commission' => $this->currencyView($transactionCreated->commission)
-                                ];
+                                // $dataEmail = [
+                                //     'customer_name' => $transactionCreated->lead->customer_name,
+                                //     'email' => $this->hideEmail($transactionCreated->lead->email),
+                                //     'no_telepon' => $this->hidePhoneNumber($transactionCreated->lead->no_telepon),
+                                //     'transaction_date' => $this->convertDateView($transactionCreated->transaction_date),
+                                //     'amount' => $this->currencyView($transactionCreated->amount),
+                                //     'commission' => $this->currencyView($transactionCreated->commission)
+                                // ];
     
-                                $affiliateEmail = $transactionCreated->lead->user->email;
+                                // $affiliateEmail = $transactionCreated->lead->user->email;
     
-                                Mail::send('admin.transaction._email', $dataEmail, function ($message) use ($affiliateEmail) {
-                                    $message->to($affiliateEmail)->subject('Affiliate Transaction Success');
-                                });
+                                // Mail::send('admin.transaction._email', $dataEmail, function ($message) use ($affiliateEmail) {
+                                //     $message->to($affiliateEmail)->subject('Affiliate Transaction Success');
+                                // });
     
                                 $dataWithdrawal = [
+                                    'transaction_id' => $transactionCreated->id,
                                     'date' => Carbon::NOW(),
                                     'user_id' => $transactionCreated->lead->user->id,
                                     'total' => $transactionCreated->commission,
@@ -300,5 +301,65 @@ class TransactionController extends Controller
                 return $this->sendResponse($message, '', 400);
             }
         }
+    }
+
+    public function exportCsv($status, $startDate, $endDate) {
+        $transactionList = Transaction::latest();
+        if ($status !== 'all') {
+            if ($status == Lead::ON_PROCESS) {
+                $transactionList->where('leads.status', Lead::ON_PROCESS);
+            } elseif ($status == Lead::SUCCESS) {
+                $transactionList->where('leads.status', Lead::SUCCESS);
+            } else {
+                $transactionList->where('leads.status', Lead::CANCELED);
+            }
+        }
+
+        if ($startDate !== 'all' && $endDate !== 'all') {
+            $transactionList->whereBetween('transactions.date', [$startDate, $endDate]);
+        }
+
+        $date = Carbon::now()->format("Ymd");
+        $fileName = "data_transaction_$date.csv";
+
+        $headers = array(
+            "Content-type"        => "text/csv",
+            "Content-disposition" => "attachment; filename=$fileName",
+            "Pragma"              => "no-cache",
+            "Cache-Control"       => "must-revalidate, post-check=0, pre-check=0",
+            "Expires"             => "0"
+        );
+
+        $listColumn = ['Affiliate', 'Customer', 'Vendor', 'Tanggal Daftar', 'Product / Service', 'Tanggal Transaksi', 'Jumlah Bayar', 'Komisi', 'Status'];
+
+        $callback = function() use ($listColumn, $transactionList) {
+            $file = fopen('php://output', 'w');
+            fputcsv($file, $listColumn);
+
+            foreach ($transactionList->get() as $indexLead => $transaction) {
+                $affiliate = $transaction->lead->user->nama_depan.' '.$transaction->lead->user->nama_belakang;
+                $customerName = $transaction->lead->customer_name;
+                $vendor = $transaction->lead->vendor->name;
+                $tanggalDaftar = $this->convertDateView($transaction->lead->date);
+                $productService = $transaction->service_commission->title;
+                $tanggalTransaksi = $this->convertDateView($transaction->date);
+                $jumlahBayar = $this->currencyView($transaction->amount);
+                $komisi = $this->currencyView($transaction->commission);
+                
+                if ($transaction->lead->status == Lead::ON_PROCESS) {
+                    $status = 'ON PROCESS';
+                } else if ($transaction->lead->status == Lead::SUCCESS) {
+                    $status = 'SUCCESS';
+                } else {
+                    $status = 'CANCELED';
+                }
+
+                fputcsv($file, [$affiliate, $customerName, $vendor, $tanggalDaftar, $productService, $tanggalTransaksi, $jumlahBayar, $komisi, $status]);
+            }
+
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, $headers);
     }
 }

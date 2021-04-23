@@ -30,6 +30,7 @@ class KomisiController extends Controller
                 'title.required' => 'Title tidak boleh kosong',
                 'service_link.required' => 'Service Link tidak boleh kosong',
                 'marketing_text.required' => 'Marketing Text tidak boleh kosong',
+                'twitter_marketing_text.required' => 'Twitter Marketing Text tidak boleh kosong',
                 'commission_type_id.required' => 'Tipe Komisi tidak boleh kosong',
                 'commission_value.required' => 'Commission Value tidak boleh kosong'
             ];
@@ -39,6 +40,7 @@ class KomisiController extends Controller
                 'title' => 'required|string',
                 'service_link' => 'required|string',
                 'marketing_text' => 'required|string',
+                'twitter_marketing_text' => 'required|string',
                 'commission_type_id' => 'required',
                 'commission_value' => 'required|string'
             ], $message);
@@ -74,6 +76,7 @@ class KomisiController extends Controller
                 'description' => $request->description,
                 'service_link' => $request->service_link,
                 'marketing_text' => $request->marketing_text,
+                'twitter_marketing_text' => $request->twitter_marketing_text,
                 'img_upload' => isset($filename) ? $filename : NULL,
                 'commission_type_id' => $request->commission_type_id,
                 'commission_value' => $request->commission_value,
@@ -102,6 +105,7 @@ class KomisiController extends Controller
                 'title.required' => 'Title tidak boleh kosong',
                 'service_link.required' => 'Service Link tidak boleh kosong',
                 'marketing_text.required' => 'Marketing Text tidak boleh kosong',
+                'twitter_marketing_text.required' => 'Twitter Marketing Text tidak boleh kosong',
                 'commission_type_id.required' => 'Tipe Komisi tidak boleh kosong',
                 'commission_value.required' => 'Commission Value tidak boleh kosong'
             ];
@@ -111,6 +115,7 @@ class KomisiController extends Controller
                 'title' => 'required|string',
                 'service_link' => 'required|string',
                 'marketing_text' => 'required|string',
+                'twitter_marketing_text' => 'required|string',
                 'commission_type_id' => 'required',
                 'commission_value' => 'required|string'
             ], $message);
@@ -154,6 +159,7 @@ class KomisiController extends Controller
                 'description' => $request->description,
                 'service_link' => $request->service_link,
                 'marketing_text' => $request->marketing_text,
+                'twitter_marketing_text' => $request->twitter_marketing_text,
                 'img_upload' => $filename,
                 'commission_type_id' => $request->commission_type_id,
                 'commission_value' => $request->commission_value,

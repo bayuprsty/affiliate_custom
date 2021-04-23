@@ -186,11 +186,20 @@ class AffiliateController extends Controller
                                     $newMarketingText = implode("\n", $arrText);
 
                                     foreach ($media as $key => $value) {
-                                        $link[$key] = $url.$service->id.'.'.$userCreated->id.'.'.$value->id;
-                                        if ($key !== 'Website') {
+                                        if ($key == 'Telegram') {
+                                            $link[$key] = rawurlencode($url.$service->id.'.'.$userCreated->id.'.'.$value->id);
+                                        } else {
+                                            $link[$key] = $url.$service->id.'.'.$userCreated->id.'.'.$value->id;
+                                        }
+                                        
+                                        if ($key !== 'Website' && ($key == 'Email' || $key == 'Telegram')) {
                                             $marketingText[$key] = rawurlencode(str_replace('{{link}}', $link[$key], $newMarketingText));
+                                        } else {
+                                            $marketingText[$key] = str_replace('{{link}}', $link[$key], $newMarketingText);
                                         }
                                     }
+
+                                    // dd($link);
 
                                     $dataService[] = [
                                         'service_id' => $service->id,
@@ -249,12 +258,21 @@ class AffiliateController extends Controller
             foreach ($userList as $key => $user) {
                 foreach ($serviceCommission as $idxVendor => $service) {
                     $arrText = explode("\r\n", $service->marketing_text);
-                    $newMarketingText = implode("\n", $arrText);
+                    $stringMarketingText = implode("\n", $arrText);
                     
                     foreach ($media as $key => $value) {
-                        $link[$key] = $url.$service->id.'.'.$user->id.'.'.$value->id;
-                        if ($key !== 'Website') {
-                            $marketingText[$key] = rawurlencode(str_replace('{{link}}', $link[$key], $newMarketingText));
+                        if ($key == 'Telegram') {
+                            $link[$key] = rawurlencode($url.$service->id.'.'.$user->id.'.'.$value->id);
+                        } else {
+                            $link[$key] = $url.$service->id.'.'.$user->id.'.'.$value->id;
+                        }
+
+                        $replacedMarketingText = str_replace('{{link}}', $link[$key], $stringMarketingText);
+                        
+                        if ($key !== 'Website' && ($key == 'Email' || $key == 'Telegram')) {
+                            $marketingText[$key] = rawurlencode($replacedMarketingText);
+                        } else {
+                            $marketingText[$key] = $replacedMarketingText;
                         }
                     }
 

@@ -178,7 +178,7 @@
             dateStart = $('#dateStart').val() ? $('#dateStart').val() : 'all';
             dateEnd = $('#dateEnd').val() ? $('#dateEnd').val() : 'all';
 
-            window.open("downloadPdf/" + status + "/" + dateStart + "/" + dateEnd, "_blank");
+            window.open("exportCsv/" + status + "/" + dateStart + "/" + dateEnd, "_blank");
         });
 
         $('body').on('click', '#add-transaction', function() {

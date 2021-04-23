@@ -178,4 +178,63 @@ class LeadController extends Controller
         $pdf = PDF::loadView('admin.lead._printPdfLead', ['lead' => $lead->get()]);
         return $pdf->setPaper('A4', 'landscape')->stream();
     }
+
+    public function downloadCsv($status, $startDate, $endDate) {
+        $leadList = Lead::latest();
+
+        if ($status !== 'all') {
+            if ($status == Lead::ON_PROCESS) {
+                $leadList->where('status', Lead::ON_PROCESS);
+            } elseif ($status == Lead::SUCCESS) {
+                $leadList->where('status', Lead::SUCCESS);
+            } else {
+                $leadList->where('status', Lead::CANCELED);
+            }
+        }
+
+        if ($startDate !== 'all' && $endDate !== 'all') {
+            $leadList->whereBetween('date', [$startDate, $endDate]);
+        }
+
+        $date = Carbon::now()->format("Ymd");
+        $fileName = "data_lead_$date.csv";
+
+        $headers = array(
+            "Content-type"        => "text/csv",
+            "Content-disposition" => "attachment; filename=$fileName",
+            "Pragma"              => "no-cache",
+            "Cache-Control"       => "must-revalidate, post-check=0, pre-check=0",
+            "Expires"             => "0"
+        );
+
+        $listColumn = ['Affiliate', 'Customer Name', 'Vendor', 'Email', 'Nomor Telepon', 'Tanggal', 'Status'];
+
+        $callback = function() use ($listColumn, $leadList) {
+            $file = fopen('php://output', 'w');
+            fputcsv($file, $listColumn);
+
+            foreach ($leadList->get() as $indexLead => $lead) {
+                $affiliate = $lead->user->nama_depan.' '.$lead->user->nama_belakang;
+                $customerName = $lead->customer_name;
+                $vendor = $lead->vendor->name;
+                $email = $lead->email;
+                $nomorTelepon = $lead->no_telepon;
+                $tanggal = $this->convertDateView($lead->date);
+                
+                if ($lead->status == Lead::ON_PROCESS) {
+                    $status = 'ON PROCESS';
+                } else if ($lead->status == Lead::SUCCESS) {
+                    $status = 'SUCCESS';
+                } else {
+                    $status = 'CANCELED';
+                }
+
+                fputcsv($file, [$affiliate, $customerName, $vendor, $email, $nomorTelepon, $tanggal, $status]);
+            }
+
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, $headers);
+    }
 }

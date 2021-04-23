@@ -84,6 +84,7 @@ Route::group(['middleware' => 'auth'], function() {
             Route::post('/cancel', 'Admin\TransactionController@cancel')->name('transaction.cancel');
 
             Route::get('/downloadPdf/{status}/{start_date}/{end_date}', 'Admin\TransactionController@downloadPdf');
+            Route::get('/exportCsv/{status}/{start_date}/{end_date}', 'Admin\TransactionController@exportCsv');
             Route::get('/download-template', 'Admin\TransactionController@downloadTemplate');
 
             Route::post('upload', 'Admin\TransactionController@uploadTransaction')->name('transaction.upload');
@@ -97,6 +98,7 @@ Route::group(['middleware' => 'auth'], function() {
             Route::post('/cancel/{id}', 'Admin\LeadController@cancel')->name('lead.cancel');
 
             Route::get('/downloadPdf/{status}/{start_date}/{end_date}', 'Admin\LeadController@downloadPdf');
+            Route::get('/downloadCsv/{status}/{start_date}/{end_date}', 'Admin\LeadController@downloadCsv');
         });
 
         Route::group(['prefix' => 'withdraw'], function() {

@@ -76,9 +76,9 @@
 @section('js')
 <script type="text/javascript">
     $(document).ready(function() {
-        var prosesLeadFieldset = document.getElementById('prosesLeadFieldset');
+        let prosesLeadFieldset = document.getElementById('prosesLeadFieldset');
 
-        var leadList = $('#lead_list').DataTable( {
+        let leadList = $('#lead_list').DataTable( {
             processing: true,
             serverside: true,
             bLengthChange : false,
@@ -134,7 +134,7 @@
             dateStart = $('#dateStart').val() ? $('#dateStart').val() : 'all';
             dateEnd = $('#dateEnd').val() ? $('#dateEnd').val() : 'all';
 
-            window.open("downloadPdf/" + status + "/" + dateStart + "/" + dateEnd, "_blank");
+            window.open("downloadCsv/" + status + "/" + dateStart + "/" + dateEnd, "_blank");
         });
 
         $('body').on('click', '#add-lead', function() {
@@ -146,8 +146,8 @@
         })
 
         $('body').on('click', '#leadProcess', function() {
-            var id = $(this).attr('data-id');
-            var url = "{{ route('lead.detail') }}";
+            let id = $(this).attr('data-id');
+            let url = "{{ route('lead.detail') }}";
 
             $('#leadProsesForm').trigger("reset");
 
@@ -219,8 +219,8 @@
 
         //////////////////////////////////////////////// AJAX GET VALUE ///////////////////////////////////////////
         $('#productService').on('change', function() {
-            var service_id = $(this).val();
-            var amount = $('#amount').val();
+            let service_id = $(this).val();
+            let amount = $('#amount').val();
             
             if (amount > 0 && service_id !== '') {
                 $.ajax({
@@ -238,8 +238,8 @@
         });
 
         $('#amount').keyup(function() {
-            var service_id = $('#productService').val();
-            var amount = $(this).val();
+            let service_id = $('#productService').val();
+            let amount = $(this).val();
             
             if (service_id !== '' && amount > 0) {
                 $.ajax({

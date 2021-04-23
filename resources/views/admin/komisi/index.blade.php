@@ -101,6 +101,7 @@
                     $('#commissionDescription').val(response.description);
                     $('#commissionServiceLink').val(response.service_link);
                     $('#commissionMarketingText').val(response.marketing_text);
+                    $('#commissionTwitterMarketingText').val(response.twitter_marketing_text);
                     $("input[name=commission_type_id][value=" + response.commission_type_id + "]").prop('checked', true);
                     $('#commissionValue').val(response.commission_value);
                     $('#commissionMax').val(response.max_commission);

@@ -11,6 +11,7 @@ use App\Models\User;
 use App\Models\Withdrawal;
 use App\Models\WithdrawalPayout;
 use App\Models\Notification;
+use Illuminate\Support\Facades\Mail;
 
 class WithdrawController extends Controller
 {
@@ -42,7 +43,25 @@ class WithdrawController extends Controller
             ]);
     
             if (WithdrawalPayout::create($request->all())) {
-                Withdrawal::where('id', $request->withdrawal_id)->update(['withdrawal_status_id' => 2, 'date_approve' => Carbon::NOW()]);
+                $withdrawal = Withdrawal::where('id', $request->withdrawal_id)->first();
+                $isUpdated = $withdrawal->update(['withdrawal_status_id' => 2, 'date_approve' => Carbon::NOW()]);
+                
+                if ($isUpdated) {
+                    $dataEmail = [
+                        'customer_name' => $withdrawal->transaction->lead->customer_name,
+                        'email' => $this->hideEmail($withdrawal->transaction->lead->email),
+                        'no_telepon' => $this->hidePhoneNumber($withdrawal->transaction->lead->no_telepon),
+                        'transaction_date' => $this->convertDateView($withdrawal->transaction->transaction_date),
+                        'amount' => $this->currencyView($withdrawal->transaction->amount),
+                        'commission' => $this->currencyView($withdrawal->transaction->commission)
+                    ];
+
+                    $affiliateEmail = $withdrawal->transaction->lead->user->email;
+
+                    Mail::send('admin.transaction._email', $dataEmail, function ($message) use ($affiliateEmail) {
+                        $message->to($affiliateEmail)->subject('Affiliate Transaction Success');
+                    });
+                }
                 
                 return $this->sendResponse('Withdrawal Request Approved');
             }
