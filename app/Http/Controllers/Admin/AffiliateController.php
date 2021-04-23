@@ -302,7 +302,7 @@ class AffiliateController extends Controller
     }
 
     public function exportCsv() {
-        $affiliateList = User::query()->where('role', 'affiliator')->get();
+        $affiliateList = User::query()->where('role', 'affiliator')->latest()->get();
 
         $date = Carbon::now()->format("Ymd");
         $fileName = "data_affiliate_$date.csv";
