@@ -180,7 +180,7 @@ class LeadController extends Controller
     }
 
     public function downloadCsv($status, $startDate, $endDate) {
-        $leadList = Lead::latest();
+        $leadList = Lead::whereNotNull('email')->latest();
 
         if ($status !== 'all') {
             if ($status == Lead::ON_PROCESS) {
