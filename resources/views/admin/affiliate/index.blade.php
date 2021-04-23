@@ -41,8 +41,13 @@
                             <hr>
                         </fieldset>
                         <fieldset id="tableAffiliate">
-                            <div class="col-md-12">
-                                <button class="btn btn-danger btn-sm" id="resendEmailLink"><i class="fas fa-envelope"></i> Resend Email Link Affiliate</button>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <button class="btn btn-danger btn-sm" id="resendEmailLink"><i class="fas fa-envelope"></i> Resend Email Link Affiliate</button>
+                                </div>
+                                <div class="col-md-6 text-right">
+                                    <button class="btn btn-success btn-sm" id="exportData">Export</button>
+                                </div>
                             </div>
                             <hr>
                             <div class="col-md-12">
@@ -197,6 +202,19 @@
                 })
             }
         })
+
+        $('body').on('click', '#exportData', function() {
+            if(affiliateList.rows().data().length == 0) {
+                $.notify("Can't export as CSV. Data is Empty", {type:"warning"});
+                return false;
+            }
+            
+            status = $('#status_id').val() ? $('#status_id').val() : 'all';
+            dateStart = $('#dateStart').val() ? $('#dateStart').val() : 'all';
+            dateEnd = $('#dateEnd').val() ? $('#dateEnd').val() : 'all';
+
+            window.open("export-csv", "_blank");
+        });
 
         function setNullInputFile() {
             $('#affiliateUploadForm').attr('disabled', false)

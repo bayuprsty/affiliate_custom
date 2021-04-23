@@ -300,4 +300,42 @@ class AffiliateController extends Controller
             return $this->sendResponse($messages, '', 200);
         }
     }
+
+    public function exportCsv() {
+        $affiliateList = User::query()->where('role', 'affiliator')->get();
+
+        $date = Carbon::now()->format("Ymd");
+        $fileName = "data_affiliate_$date.csv";
+
+        $headers = array(
+            "Content-type"        => "text/csv",
+            "Content-disposition" => "attachment; filename=$fileName",
+            "Pragma"              => "no-cache",
+            "Cache-Control"       => "must-revalidate, post-check=0, pre-check=0",
+            "Expires"             => "0"
+        );
+
+        $listColumn = ['Nama Depan', 'Nama Belakang', 'Email', 'Nomor Telepon', 'Nomor Rekening', 'Atasnama Rekening', 'Nama Bank'];
+
+        $callback = function() use ($listColumn, $affiliateList) {
+            $file = fopen('php://output', 'w');
+            fputcsv($file, $listColumn);
+
+            foreach ($affiliateList as $indexAffiliate => $affiliate) {
+                $namaDepan = $affiliate->nama_depan;
+                $namaBelakang = $affiliate->nama_belakang;
+                $nomorTelepon = $affiliate->no_telepon;
+                $email = $affiliate->email;
+                $nomorRekening = $affiliate->nomor_rekening;
+                $namaRekening = $affiliate->atasnama_bank;
+                $namaBank = $affiliate->nama_bank;
+
+                fputcsv($file, [$namaDepan, $namaBelakang, $nomorTelepon, $email, $nomorRekening, $namaRekening, $namaBank]);
+            }
+
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, $headers);
+    }
 }
