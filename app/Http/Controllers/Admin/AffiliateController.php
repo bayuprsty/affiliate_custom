@@ -183,15 +183,19 @@ class AffiliateController extends Controller
 
                                 foreach ($serviceCommission as $idxVendor => $service) {
                                     $arrText = explode("\r\n", $service->marketing_text);
-                                    $newMarketingText = implode("\n", $arrText);
+                                    $stringMarketingText = implode("\n", $arrText);
+                                    $twitterMarketingText = $service->twitter_marketing_text;
 
                                     foreach ($media as $key => $value) {
                                         $link[$key] = $url.$service->id.'.'.$userCreated->id.'.'.$value->id;
+
+                                        $replacedMarketingText = str_replace('{{link}}', $link[$key], $stringMarketingText);
+                                        $replacedTwitterMarketingText = str_replace('{{link}}', $link[$key], $twitterMarketingText);
                                         
-                                        if ($key !== 'Website' && ($key == 'Email' || $key == 'Telegram')) {
-                                            $marketingText[$key] = rawurlencode(str_replace('{{link}}', $link[$key], $newMarketingText));
+                                        if ($key !== 'Website' && $key == 'Twitter') {
+                                            $marketingText[$key] = rawurlencode($replacedTwitterMarketingText);
                                         } else {
-                                            $marketingText[$key] = str_replace('{{link}}', $link[$key], $newMarketingText);
+                                            $marketingText[$key] = rawurlencode($replacedMarketingText);
                                         }
                                     }
 
@@ -253,13 +257,17 @@ class AffiliateController extends Controller
                 foreach ($serviceCommission as $idxVendor => $service) {
                     $arrText = explode("\r\n", $service->marketing_text);
                     $stringMarketingText = implode("\n", $arrText);
+                    $twitterMarketingText = $service->twitter_marketing_text;
                     
                     foreach ($media as $key => $value) {
                         $link[$key] = $url.$service->id.'.'.$user->id.'.'.$value->id;
 
                         $replacedMarketingText = str_replace('{{link}}', $link[$key], $stringMarketingText);
+                        $replacedTwitterMarketingText = str_replace('{{link}}', $link[$key], $twitterMarketingText);
                         
-                        if ($key !== 'Website') {
+                        if ($key !== 'Website' && $key == 'Twitter') {
+                            $marketingText[$key] = rawurlencode($replacedTwitterMarketingText);
+                        } else {
                             $marketingText[$key] = rawurlencode($replacedMarketingText);
                         }
                     }
