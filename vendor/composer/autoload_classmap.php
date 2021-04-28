@@ -6,6 +6,7 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'AkelaAdminSeeder' => $baseDir . '/database/seeds/AkelaAdminSeeder.php',
     'App\\Console\\Commands\\sendEmailTransaction' => $baseDir . '/app/Console/Commands/sendEmailTransaction.php',
     'App\\Console\\Kernel' => $baseDir . '/app/Console/Kernel.php',
     'App\\Exceptions\\Handler' => $baseDir . '/app/Exceptions/Handler.php',

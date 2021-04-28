@@ -644,6 +644,7 @@ class ComposerStaticInit53feaf5e4f94364811a7b03ba5926b4a
     );
 
     public static $classMap = array (
+        'AkelaAdminSeeder' => __DIR__ . '/../..' . '/database/seeds/AkelaAdminSeeder.php',
         'App\\Console\\Commands\\sendEmailTransaction' => __DIR__ . '/../..' . '/app/Console/Commands/sendEmailTransaction.php',
         'App\\Console\\Kernel' => __DIR__ . '/../..' . '/app/Console/Kernel.php',
         'App\\Exceptions\\Handler' => __DIR__ . '/../..' . '/app/Exceptions/Handler.php',
