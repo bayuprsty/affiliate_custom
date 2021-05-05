@@ -556,7 +556,7 @@ class DatatableController extends Controller
 
     public function userAdmin(Request $request) {
         if ($request->ajax()) {
-            $user = User::all();
+            $user = User::where('role', 'admin')->get();
 
             return DataTables::of($user)
                             ->addIndexColumn()
