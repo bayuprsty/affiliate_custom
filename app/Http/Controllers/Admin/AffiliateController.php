@@ -103,7 +103,7 @@ class AffiliateController extends Controller
             "Expires"             => "0"
         );
 
-        $listColumn = ['Nama Depan', 'Nama Belakang', 'Email', 'Nomor Telepon', 'Nomor Rekening', 'Atasnama Rekening', 'Nama Bank'];
+        $listColumn = ['nama depan', 'nama belakang', 'email', 'nomor telepon', 'nomor rekening', 'atasnama rekening', 'nama bank'];
 
         $callback = function() use ($listColumn) {
             $file = fopen('php://output', 'w');
@@ -149,26 +149,26 @@ class AffiliateController extends Controller
                     })->get();
 
                     foreach ($dataCsv as $data) {
-                        $userAvailable = User::where('email', $data['Email'])->first();
+                        $userAvailable = User::where('email', $data['email'])->first();
                         if ($userAvailable) {
                             $userUpdated = $userAvailable->update([
-                                'nama_depan'     => $data['Nama Depan'],
-                                'nama_belakang'  => $data['Nama Belakang'],
-                                'no_telepon'     => $data['Nomor Telepon'],
-                                'nomor_rekening' => $data['Nomor Rekening'],
-                                'atasnama_bank'  => $data['Atasnama Rekening'],
-                                'nama_bank'      => $data['Nama Bank']
+                                'nama_depan'     => $data['nama depan'],
+                                'nama_belakang'  => $data['nama belakang'],
+                                'no_telepon'     => $data['nomor telepon'],
+                                'nomor_rekening' => $data['nomor rekening'],
+                                'atasnama_bank'  => $data['atasnama rekening'],
+                                'nama_bank'      => $data['nama bank']
                             ]);
                         } else {
                             try {
                                 $userCreated = User::create([
-                                    'nama_depan'     => $data['Nama Depan'],
-                                    'nama_belakang'  => $data['Nama Belakang'],
-                                    'email'          => $data['Email'],
-                                    'no_telepon'     => $data['Nomor Telepon'],
-                                    'nomor_rekening' => $data['Nomor Rekening'],
-                                    'atasnama_bank'  => $data['Atasnama Rekening'],
-                                    'nama_bank'      => $data['Nama Bank'],
+                                    'nama_depan'     => $data['nama depan'],
+                                    'nama_belakang'  => $data['nama belakang'],
+                                    'email'          => $data['email'],
+                                    'no_telepon'     => $data['nomor telepon'],
+                                    'nomor_rekening' => $data['nomor rekening'],
+                                    'atasnama_bank'  => $data['atasnama rekening'],
+                                    'nama_bank'      => $data['nama bank'],
                                     'join_date'      => Carbon::NOW()
                                 ]);
                             } catch (\Exception $e) {
@@ -207,18 +207,20 @@ class AffiliateController extends Controller
                                 }
 
                                 $dataMail = [
-                                    'nama_lengkap' => $data['Nama Depan'].' '.$data['Nama Belakang'],
+                                    'nama_lengkap' => $data['nama depan'].' '.$data['nama belakang'],
                                     'serviceList' => $dataService,
                                 ];
 
-                                Mail::send(['html' => 'admin.affiliate.email_link_affiliate'], $dataMail, function($message) use ($data) {
-                                    $message->to($data['Email'])->subject('Email Link Affiliate');
-                                });
+                                // if ($data['email'] != '' || !empty($data['email'] || !is_null($data['email']))) {
+                                //     Mail::send(['html' => 'admin.affiliate.email_link_affiliate'], $dataMail, function($message) use ($data) {
+                                //         $message->to($data['email'])->subject('Email Link Affiliate');
+                                //     });
+                                // }
                             }
                         } else {
                             $failed++;
                             $failedData[] = [
-                                'email' => $data['Email'],
+                                'email' => $data['email'],
                                 'message' => $failedMessage
                             ];
                         }
@@ -238,6 +240,88 @@ class AffiliateController extends Controller
 
                 $messages = 'File upload must be csv type';
                 return $this->sendResponse($messages, '', 400);
+            }
+        }
+    }
+
+    public function uploadData(Request $request) {
+        if ($request->ajax()) {
+            $userUpdated = $userCreated = NULL;
+
+            $url = URL::to('/').'/share/';
+            $media = Media::get()->keyBy('name');
+
+            $serviceCommission = ServiceCommission::whereHas('vendor', function($query) {
+                $query->where('active', true);
+            })->get();
+
+            $userAvailable = User::where('email', $request->email)->first();
+            if ($userAvailable) {
+                $userUpdated = $userAvailable->update([
+                    'nama_depan'     => $request->nama_depan,
+                    'nama_belakang'  => $request->nama_belakang,
+                    'no_telepon'     => $request->nomor_telepon,
+                    'nomor_rekening' => $request->nomor_rekening,
+                    'atasnama_bank'  => $request->atasnama_bank,
+                    'nama_bank'      => $request->nama_bank
+                ]);
+            } else {
+                try {
+                    $userCreated = User::create([
+                        'nama_depan'     => $request->nama_depan,
+                        'nama_belakang'  => $request->nama_belakang,
+                        'email'          => $request->email,
+                        'no_telepon'     => $request->nomor_telepon,
+                        'nomor_rekening' => $request->nomor_rekening,
+                        'atasnama_bank'  => $request->atasnama_bank,
+                        'nama_bank'      => $request->nama_bank,
+                        'join_date'      => Carbon::NOW()
+                    ]);
+                } catch (\Exception $e) {
+                    $failedMessage = $e->getMessage();
+                }
+
+                if ($userCreated || $userUpdated) {
+                    if ($userCreated) {
+                        $dataService = [];
+
+                        foreach ($serviceCommission as $idxVendor => $service) {
+                            $arrText = explode("\r\n", $service->marketing_text);
+                            $stringMarketingText = implode("\n", $arrText);
+                            $twitterMarketingText = $service->twitter_marketing_text;
+
+                            foreach ($media as $key => $value) {
+                                $link[$key] = $url.$service->id.'.'.$userCreated->id.'.'.$value->id;
+
+                                $replacedMarketingText = str_replace('{{link}}', $link[$key], $stringMarketingText);
+                                $replacedTwitterMarketingText = str_replace('{{link}}', $link[$key], $twitterMarketingText);
+                                
+                                if ($key !== 'Website' && $key == 'Twitter') {
+                                    $marketingText[$key] = rawurlencode($replacedTwitterMarketingText);
+                                } else {
+                                    $marketingText[$key] = rawurlencode($replacedMarketingText);
+                                }
+                            }
+
+                            $dataService[] = [
+                                'service_id' => $service->id,
+                                'link' => $link,
+                                'marketing_text' => $marketingText
+                            ];
+                        }
+
+                        $dataMail = [
+                            'nama_lengkap' => $request->nama_depan.' '.$request->nama_belakang,
+                            'serviceList' => $dataService,
+                        ];
+
+                        if ($request->email != '' || !empty($request->email || !is_null($request->email))) {
+                            Mail::send(['html' => 'admin.affiliate.email_link_affiliate'], $dataMail, function($message) use ($request) {
+                                $message->to($request->email)->subject('Email Link Affiliate');
+                            });
+                        }
+                    }
+                }
             }
         }
     }

@@ -25,19 +25,29 @@
                     <div class="card-body">
                         <fieldset class="hide" id="affiliateUploadForm">
                             <form id="uploadForm">
-                                <div class="card py-3 mb-shadow-2">
-                                    <div class="col-md-12">
-                                        <input type="file" name="affiliateFile" id="uploadFile">
-                                        <div class="mt-2 col-md-3 p-0">
-                                            <button type="submit" class="btn btn-success btn-sm">Simpan</button>
-                                            <a href="download-template" class="btn btn-info btn-sm">Download Template</a>
-                                            <div class="float-right mr-5 hide" id="loader">
-                                                <img src="/uploads/spinner.gif" width="35px" height="35px"/>
+                                
+                            </form>
+                            <div class="card py-3 mb-shadow-2">
+                                <div class="col-md-12">
+                                    <input type="file" name="affiliateFile" id="uploadFile">
+                                    <div class="mt-2 col-md-3 p-0">
+                                        <button type="button" class="btn btn-success btn-sm" id="uploadProgress">Simpan</button>
+                                        <a href="download-template" class="btn btn-info btn-sm">Download Template</a>
+                                    </div>
+                                    <div class="mt-2 hide" id="progressbar">
+                                        <div class="progress active">
+                                            <div class="progress-bar bg-info progress-bar-striped" role="progressbar" aria-valuemin="0" aria-valuemax="100" id="upload-progress" style="width: 0%">
+                                                <span id="inner-progress" class="text-white font-weight-bold"></span>
                                             </div>
+                                        </div>
+                                        <div class="text-right font-weight-bold">
+                                            <span>
+                                                <span id="complete" class="text-danger">0</span> / <span id="length" class="text-success">0</span> Complete
+                                            </span>
                                         </div>
                                     </div>
                                 </div>
-                            </form>
+                            </div>
                             <hr>
                         </fieldset>
                         <fieldset id="tableAffiliate">
@@ -66,7 +76,7 @@
 
 @section('js')
 <script type="text/javascript">
-    $(async () => {
+    $(function() {
         let affiliateList;
         let detailTransactionAffiliate;
         let upload = false;
@@ -128,38 +138,138 @@
             })
         });
 
-        $('body').on('submit', '#uploadForm', function(e) {
-            e.preventDefault();
+        // $('body').on('submit', '#uploadForm', function(e) {
+        //     e.preventDefault();
             
-            var formData = new FormData(this);
+        //     var formData = new FormData(this);
 
-            $.ajax({
-                url: "{{ route('affiliate.upload') }}",
-                method: "POST",
-                data: formData,
-                contentType: false,
-                processData: false,
-                beforeSend: function() {
-                    $('#affiliateUploadForm').attr('disabled', true)
-                    $('#loader').removeClass('hide')
-                },
-                success: async (res) => {
-                    if (res.code == 200 && res.data === '') {
-                        $.notify(res.message, "success");
-                        window.setTimeout(function(){
-                            location.reload()
-                        }, 1000)
-                    } else if (res.code == 200 && res.data !== '') {
-                        $.notify(res.message, "info");
-                        window.setTimeout(function(){
-                            location.reload()
-                        }, 1000)
-                    } else {
-                        $.notify(res.message, "danger")
+        //     $.ajax({
+        //         url: "{{ route('affiliate.upload') }}",
+        //         method: "POST",
+        //         data: formData,
+        //         contentType: false,
+        //         processData: false,
+        //         beforeSend: function() {
+        //             $('#affiliateUploadForm').attr('disabled', true)
+        //             $('#loader').removeClass('hide')
+        //         },
+        //         send: function() {
+        //             timeAllData = setTimeout(function(){
+        //                 $.get('/get-upload-data', function(data){
+        //                     if (data !== '') {
+        //                         $('#allData').html(data);
+        //                         clearTimeout(timeAllData);
+        //                         return false;
+        //                     }
+        //                 })
+        //             }, 1000)
+                    
+        //             timeProgress = setTimeout(function () {
+        //                 $.get('/get-success-upload', function(data){
+        //                     $('#process').html(data);
+        //                     if (data === allDataUpload) {
+        //                         clearTimeout(timeProgress);
+        //                     }
+        //                 })
+        //             }, 2000)
+        //         },
+        //         success: function (res) {
+        //             if (res.code == 200 && res.data === '') {
+        //                 $.notify(res.message, "success");
+        //                 window.setTimeout(function(){
+        //                     location.reload()
+        //                 }, 1000)
+        //             } else if (res.code == 200 && res.data !== '') {
+        //                 $.notify(res.message, "info");
+        //                 window.setTimeout(function(){
+        //                     location.reload()
+        //                 }, 1000)
+        //             } else {
+        //                 $.notify(res.message, "danger")
+        //             }
+        //         }
+        //     })
+        // })
+
+        $('#uploadProgress').bind('click', function() {
+            let regex = /^([a-zA-Z0-9\s_\\.\-:])+(.csv)$/;
+            if (regex.test($('#uploadFile').val().toLowerCase())) {
+                $('#affiliateUploadForm').attr('disabled', true)
+                $('#progressbar').removeClass('hide');
+
+                let uploadProgress = document.getElementById('upload-progress');
+
+                let file = document.querySelector('#uploadFile').files[0];
+                let reader = new FileReader();
+
+                reader.readAsText(file);
+
+                reader.onload = function (e) {
+                    let csv = e.target.result;
+
+                    let rows = csv.replace(/^\s+|\s+$/g,"").split("\r\n");
+                    let length = rows.length - 1;
+
+                    $('#length').html(length);
+
+                    let percentProgress = (100 / length).toFixed(2);
+                    let successUpload = 0;
+                    let percentAnimate = 0;
+                    
+                    for (let line = 1; line < rows.length; line++) {
+                        if (rows[line] !== '') {
+                            let data = rows[line].split(',');
+                            let affiliate = {
+                                nama_depan: data[0],
+                                nama_belakang: data[1],
+                                email: data[2],
+                                nomor_telepon: data[3],
+                                nomor_rekening: data[4],
+                                atasnama_rekening: data[5],
+                                nama_bank: data[6]
+                            }
+
+                            $.ajax({
+                                url: "{{ route('affiliate.uploadData') }}",
+                                method: "POST",
+                                datatype: "JSON",
+                                data: affiliate,
+                                success: function(res) {
+                                    successUpload++;
+
+                                    percentAnimate = Math.round(successUpload * percentProgress);
+                                    uploadProgress.style.width = percentAnimate + '%';
+
+                                    $('#inner-progress').html(`${percentAnimate}%`);
+                                    $('#complete').html(successUpload);
+
+                                    if (successUpload === length) {
+                                        $.notify(`${successUpload} data berhasil diupload`, 'success');
+                                        affiliateList.ajax.reload();
+
+                                        allSuccess();
+
+                                        setTimeout(() => {
+                                            $('#progressbar').addClass('hide');
+
+                                            $('#affiliateUploadForm').addClass('hide');
+                                            upload = false;
+
+                                            $('#affiliateUploadForm').attr('disabled', false)
+                                        }, 2000);
+                                    }
+                                }
+                            })
+                        }
                     }
                 }
-            })
+            }
         })
+
+        function allSuccess() {
+            $('#complete').removeClass('text-danger').addClass('text-success');
+            $('#upload-progress').removeClass('bg-info').addClass('bg-success');
+        }
 
         // Check Box Affiliate
 

@@ -67,6 +67,8 @@ Route::group(['middleware' => 'auth'], function() {
             Route::post('/upload-affiliate', 'Admin\AffiliateController@uploadAffiliate')->name('affiliate.upload');
             Route::get('/resend-email', 'Admin\AffiliateController@resendEmailLinkAffiliate')->name('affiliate.resendEmail');
 
+            Route::post('/upload-data', 'Admin\AffiliateController@uploadData')->name('affiliate.uploadData');
+
             Route::get('/export-csv', 'Admin\AffiliateController@exportCsv');
         });
         
